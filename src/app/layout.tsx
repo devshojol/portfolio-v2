@@ -4,7 +4,7 @@ import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import ScrollProgress from "@/components/ScrollProgress";
-import { profile } from "@/lib/data";
+import { profile, siteUrl } from "@/lib/data";
 
 /* Self-hosted variable fonts — no external requests, no layout shift. */
 const inter = localFont({
@@ -34,10 +34,9 @@ const bengali = localFont({
   display: "swap",
 });
 
-const siteUrl = "https://shojol-islam.web.app";
-
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  alternates: { canonical: "/" },
   title: {
     default: `${profile.name} — ${profile.role}`,
     template: `%s · ${profile.name}`,
@@ -55,11 +54,26 @@ export const metadata: Metadata = {
   authors: [{ name: profile.name, url: siteUrl }],
   creator: profile.name,
   openGraph: {
-    type: "website",
+    type: "profile",
     url: siteUrl,
     title: `${profile.name} — ${profile.role}`,
     description: profile.tagline,
     siteName: profile.name,
+    locale: "en_US",
+    firstName: profile.firstName,
+    username: "devshojol",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Let Google use full-size image previews and untruncated snippets.
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   twitter: {
     card: "summary_large_image",
