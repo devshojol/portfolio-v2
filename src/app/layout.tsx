@@ -13,7 +13,13 @@ const inter = localFont({
   style: "normal",
   variable: "--font-inter",
   display: "swap",
-  fallback: ["ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+  fallback: [
+    "ui-sans-serif",
+    "system-ui",
+    "-apple-system",
+    "Segoe UI",
+    "sans-serif",
+  ],
 });
 
 const jetbrains = localFont({
@@ -60,6 +66,7 @@ export const metadata: Metadata = {
     description: profile.tagline,
     siteName: profile.name,
     locale: "en_US",
+    images: ["/thumbnail.jpg"],
     firstName: profile.firstName,
     username: "devshojol",
   },
@@ -94,7 +101,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${jetbrains.variable} ${bengali.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrains.variable} ${bengali.variable}`}
+    >
       <body className="noise antialiased">
         <ScrollProgress />
         <Cursor />

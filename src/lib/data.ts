@@ -2,7 +2,7 @@
  * Canonical origin, no trailing slash. Used by metadataBase, the sitemap,
  * robots.txt and the JSON-LD graph, so it lives in exactly one place.
  */
-export const siteUrl = "https://shojol-islam.web.app";
+export const siteUrl = "https://devshojol.vercel.app";
 
 export const profile = {
   name: "Shojol Islam",
