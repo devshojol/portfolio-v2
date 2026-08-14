@@ -8,7 +8,10 @@ import { experience } from "@/lib/data";
 
 export default function Experience() {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start 0.7", "end 0.6"] });
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.7", "end 0.6"],
+  });
   const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
@@ -23,20 +26,24 @@ export default function Experience() {
 
         <div ref={ref} className="relative pl-8 sm:pl-12">
           {/* rail */}
-          <div className="absolute left-[3px] top-2 h-full w-px bg-line" />
+          <div className="absolute left-0.75 top-2 h-full w-px bg-line" />
           <motion.div
             style={{ scaleY: lineScale }}
-            className="absolute left-[3px] top-2 h-full w-px origin-top bg-gradient-to-b from-accent via-sky to-transparent"
+            className="absolute left-0.75 top-2 h-full w-px origin-top bg-linear-to-b from-accent via-sky to-transparent"
           />
 
           {experience.map((job, i) => (
-            <Reveal key={job.company} delay={i * 0.08} className="relative pb-4">
+            <Reveal
+              key={job.company}
+              delay={i * 0.08}
+              className="relative pb-4"
+            >
               <span className="absolute -left-8 top-2 sm:-left-12">
-                <span className="relative flex h-[9px] w-[9px] translate-x-[-2px]">
+                <span className="relative flex h-2.25 w-2.25 -translate-x-0.5">
                   {job.current && (
                     <span className="absolute inline-flex h-full w-full animate-pulse-ring rounded-full bg-accent" />
                   )}
-                  <span className="relative inline-flex h-[9px] w-[9px] rounded-full border border-accent bg-night" />
+                  <span className="relative inline-flex h-2.25 w-2.25 rounded-full border border-accent bg-night" />
                 </span>
               </span>
 
@@ -45,14 +52,21 @@ export default function Experience() {
                   {job.role}{" "}
                   <span className="text-accent">· {job.company}</span>
                 </h3>
-                <span className="font-mono text-[12px] text-ink-faint">{job.period}</span>
+                <span className="font-mono text-[12px] text-ink-faint">
+                  {job.period}
+                </span>
               </div>
-              <div className="mt-1 text-[13px] text-ink-dim">{job.location}</div>
+              <div className="mt-1 text-[13px] text-ink-dim">
+                {job.location}
+              </div>
 
               <ul className="mt-6 max-w-3xl space-y-3.5">
                 {job.points.map((p) => (
-                  <li key={p} className="flex gap-3 text-[15px] leading-relaxed text-ink-dim">
-                    <span className="mt-[9px] h-px w-4 shrink-0 bg-line-strong" />
+                  <li
+                    key={p}
+                    className="flex gap-3 text-[15px] leading-relaxed text-ink-dim"
+                  >
+                    <span className="mt-2.25 h-px w-4 shrink-0 bg-line-strong" />
                     <span>{p}</span>
                   </li>
                 ))}

@@ -96,7 +96,7 @@ export default function About() {
                 <div className="mt-5 space-y-4">
                   {certifications.map((c) => (
                     <div key={c.title} className="group flex items-start gap-3">
-                      <span className="mt-[7px] h-1.5 w-1.5 shrink-0 rotate-45 border border-accent/60 transition-colors duration-300 group-hover:bg-accent" />
+                      <span className="mt-1.75 h-1.5 w-1.5 shrink-0 rotate-45 border border-accent/60 transition-colors duration-300 group-hover:bg-accent" />
                       <div>
                         <div className="text-[14px] text-ink">{c.title}</div>
                         <div className="text-[12px] text-ink-faint">

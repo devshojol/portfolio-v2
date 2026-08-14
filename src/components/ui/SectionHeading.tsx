@@ -16,7 +16,7 @@ export default function SectionHeading({
       <Reveal>
         <div className="flex items-center gap-4">
           <span className="font-mono text-xs tracking-[0.28em] text-accent">{index}</span>
-          <span className="h-px flex-1 max-w-24 bg-gradient-to-r from-accent/70 to-transparent" />
+          <span className="h-px flex-1 max-w-24 bg-linear-to-r from-accent/70 to-transparent" />
         </div>
       </Reveal>
 

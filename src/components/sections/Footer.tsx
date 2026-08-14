@@ -52,7 +52,7 @@ function Wordmark() {
       <motion.div
         aria-hidden
         style={{ maskImage: spotlight, WebkitMaskImage: spotlight }}
-        className={`${type} mask-fade-b pointer-events-none absolute inset-0 top-10 text-transparent opacity-0 transition-opacity duration-300 [-webkit-text-stroke:1px_#22d3ee] [filter:drop-shadow(0_0_6px_#22d3ee55)] group-hover:opacity-100`}
+        className={`${type} mask-fade-b pointer-events-none absolute inset-0 top-10 text-transparent opacity-0 transition-opacity duration-300 [-webkit-text-stroke:1px_#22d3ee] filter-[drop-shadow(0_0_6px_#22d3ee55)] group-hover:opacity-100`}
       >
         {WORDMARK}
       </motion.div>

@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
  */
 export default function PhoneMock({ variant }: { variant: "gonit" | "chintu" }) {
   return (
-    <div className="relative mx-auto w-[190px] shrink-0 sm:w-[210px]">
+    <div className="relative mx-auto w-47.5 shrink-0 sm:w-52.5">
       {/* glow */}
       <div
         className="absolute -inset-8 -z-10 rounded-[3rem] opacity-45 blur-3xl"
@@ -26,11 +26,11 @@ export default function PhoneMock({ variant }: { variant: "gonit" | "chintu" }) 
         whileHover={{ rotateY: -4, rotateX: 2, y: -6 }}
         transition={{ type: "spring", stiffness: 160, damping: 18 }}
         style={{ transformPerspective: 900 }}
-        className="relative rounded-[2rem] border border-line-strong bg-gradient-to-b from-[#131c2e] to-[#0a1120] p-[6px] shadow-[0_30px_60px_-25px_#000]"
+        className="relative rounded-4xl border border-line-strong bg-linear-to-b from-[#131c2e] to-surface p-1.5 shadow-[0_30px_60px_-25px_#000]"
       >
-        <div className="relative aspect-[9/19] overflow-hidden rounded-[1.6rem] bg-[#050a14]">
+        <div className="relative aspect-9/19 overflow-hidden rounded-[1.6rem] bg-[#050a14]">
           {/* notch */}
-          <div className="absolute left-1/2 top-2 z-20 h-[18px] w-[62px] -translate-x-1/2 rounded-full bg-[#0a0f1a]" />
+          <div className="absolute left-1/2 top-2 z-20 h-4.5 w-15.5 -translate-x-1/2 rounded-full bg-[#0a0f1a]" />
 
           {variant === "gonit" ? <GonitScreen /> : <ChintuScreen />}
 
@@ -47,7 +47,7 @@ function GonitScreen() {
     <div className="flex h-full flex-col px-3.5 pb-3.5 pt-9">
       <div className="flex items-center justify-between">
         <span className="text-[9px] font-semibold tracking-wide text-accent">গণিত</span>
-        <span className="rounded-full bg-accent/15 px-2 py-[2px] text-[7px] text-accent-soft">
+        <span className="rounded-full bg-accent/15 px-2 py-0.5 text-[7px] text-accent-soft">
           Class 6
         </span>
       </div>
@@ -99,7 +99,7 @@ function GonitScreen() {
             whileInView={{ width: "40%" }}
             viewport={{ once: true }}
             transition={{ duration: 1.4, ease: "easeOut", delay: 0.3 }}
-            className="h-full rounded-full bg-gradient-to-r from-accent to-sky"
+            className="h-full rounded-full bg-linear-to-r from-accent to-sky"
           />
         </div>
       </div>
@@ -112,21 +112,21 @@ function ChintuScreen() {
     <div className="flex h-full flex-col px-3.5 pb-3.5 pt-9">
       <div className="flex items-center justify-between">
         <span className="text-[9px] font-semibold text-indigo">চিন্তু</span>
-        <div className="flex gap-[3px]">
+        <div className="flex gap-0.75">
           {[0, 1, 2].map((i) => (
-            <span key={i} className="h-[3px] w-[3px] rounded-full bg-ink-faint" />
+            <span key={i} className="h-0.75 w-0.75 rounded-full bg-ink-faint" />
           ))}
         </div>
       </div>
 
-      <div className="mt-3 overflow-hidden rounded-lg border border-line bg-gradient-to-br from-[#1a2340] to-[#101a30] p-3">
+      <div className="mt-3 overflow-hidden rounded-lg border border-line bg-linear-to-br from-[#1a2340] to-[#101a30] p-3">
         <div className="text-[7px] uppercase tracking-wider text-indigo/80">গল্প</div>
         <div className="mt-1 text-[11px] font-semibold leading-tight text-ink">
           বনের রাজা ও ছোট্ট খরগোশ
         </div>
         <div className="mt-2 space-y-1">
           {[100, 88, 94, 70].map((w, i) => (
-            <div key={i} className="h-[3px] rounded-full bg-line-strong" style={{ width: `${w}%` }} />
+            <div key={i} className="h-0.75 rounded-full bg-line-strong" style={{ width: `${w}%` }} />
           ))}
         </div>
       </div>
@@ -156,7 +156,7 @@ function ChintuScreen() {
         >
           ▶
         </motion.span>
-        <div className="h-[3px] flex-1 overflow-hidden rounded-full bg-line">
+        <div className="h-0.75 flex-1 overflow-hidden rounded-full bg-line">
           <div className="h-full w-[58%] rounded-full bg-indigo" />
         </div>
       </div>

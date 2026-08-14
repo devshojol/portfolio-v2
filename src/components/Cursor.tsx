@@ -76,7 +76,7 @@ export default function Cursor() {
       ref={wrapRef}
       aria-hidden
       style={{ opacity: 0 }}
-      className="pointer-events-none fixed inset-0 z-[70] hidden transition-opacity duration-300 md:block"
+      className="pointer-events-none fixed inset-0 z-70 hidden transition-opacity duration-300 md:block"
     >
       <div
         ref={ringRef}

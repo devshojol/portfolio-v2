@@ -21,7 +21,7 @@ export default function Projects() {
           {projects.map((p, i) => (
             <Reveal key={p.id} delay={i * 0.06}>
               <TiltCard intensity={4} glow={p.accent} className="rounded-2xl">
-                <article className="relative overflow-hidden rounded-2xl border border-line bg-gradient-to-b from-surface/70 to-night/60 p-6 backdrop-blur-sm transition-colors duration-500 hover:border-line-strong sm:p-9">
+                <article className="relative overflow-hidden rounded-2xl border border-line bg-linear-to-b from-surface/70 to-night/60 p-6 backdrop-blur-sm transition-colors duration-500 hover:border-line-strong sm:p-9">
                   {/* corner accent */}
                   <div
                     className="pointer-events-none absolute -right-24 -top-24 h-56 w-56 rounded-full opacity-25 blur-3xl"
@@ -54,7 +54,7 @@ export default function Projects() {
                         {p.highlights.map((h) => (
                           <li key={h} className="flex items-start gap-2.5 text-[14px] text-ink-dim">
                             <svg
-                              className="mt-[5px] shrink-0"
+                              className="mt-1.25 shrink-0"
                               width="11"
                               height="11"
                               viewBox="0 0 24 24"

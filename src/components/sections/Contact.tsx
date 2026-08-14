@@ -64,7 +64,7 @@ export default function Contact() {
   };
 
   const field =
-    "w-full rounded-xl border border-line bg-surface/50 px-4 py-3 text-[15px] text-ink placeholder:text-ink-faint outline-none transition-all duration-300 focus:border-accent/60 focus:bg-surface/80 focus:ring-2 focus:ring-accent/15";
+    "w-full rounded-xl border border-line bg-surface/50 px-4 py-3 text-[15px] text-ink outline-none transition-all duration-300 focus:ring-2 focus:ring-accent/15";
 
   return (
     <section
@@ -151,7 +151,7 @@ export default function Contact() {
 
           {/* right: form */}
           <Reveal direction="left" delay={0.08}>
-            <div className="relative rounded-2xl border border-line bg-gradient-to-b from-surface/60 to-night/40 p-6 backdrop-blur-sm sm:p-8">
+            <div className="relative rounded-2xl border border-line bg-linear-to-b from-surface/60 to-night/40 p-6 backdrop-blur-sm sm:p-8">
               <AnimatePresence mode="wait">
                 {status === "sent" ? (
                   <motion.div
@@ -159,7 +159,7 @@ export default function Contact() {
                     initial={{ opacity: 0, scale: 0.96 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
-                    className="flex min-h-[380px] flex-col items-center justify-center text-center"
+                    className="flex min-h-95 flex-col items-center justify-center text-center"
                   >
                     <motion.span
                       initial={{ scale: 0 }}
@@ -216,7 +216,7 @@ export default function Contact() {
                       onChange={(e) =>
                         setForm({ ...form, company: e.target.value })
                       }
-                      className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                      className="absolute left-[-9999px] h-0 w-0 opacity-0"
                       aria-hidden
                     />
 
@@ -302,7 +302,7 @@ export default function Contact() {
                     <button
                       type="submit"
                       disabled={status === "sending"}
-                      className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-accent to-sky px-6 py-3.5 text-sm font-semibold text-[#03151c] transition-all duration-300 hover:shadow-[0_0_36px_-10px_#22d3ee] disabled:opacity-60"
+                      className="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-accent to-sky px-6 py-3.5 text-sm font-semibold text-[#03151c] transition-all duration-300 hover:shadow-[0_0_36px_-10px_#22d3ee] disabled:opacity-60"
                     >
                       <span className="relative z-10 inline-flex items-center gap-2">
                         {status === "sending" ? (

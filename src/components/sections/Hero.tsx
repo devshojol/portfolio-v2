@@ -43,7 +43,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute inset-0 hidden bg-[linear-gradient(95deg,#04070d_0%,#04070df2_30%,#04070dad_50%,#04070d33_68%,transparent_82%)] lg:block" />
       {/* mobile / tablet: soft vignette instead */}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_62%_26%,#04070d8c_0%,#04070de6_42%,#060a12f5_78%,#060a12_100%)] lg:hidden" />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-night via-night/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-44 bg-linear-to-t from-night via-night/70 to-transparent" />
 
       {/* content */}
       <motion.div
@@ -114,7 +114,7 @@ export default function Hero() {
           <Magnetic strength={0.25}>
             <a
               href="#projects"
-              className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-gradient-to-r from-accent to-sky px-6 py-3 text-sm font-semibold text-[#03151c] shadow-[0_0_30px_-8px_#22d3ee]"
+              className="group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full bg-linear-to-r from-accent to-sky px-6 py-3 text-sm font-semibold text-[#03151c] shadow-[0_0_30px_-8px_#22d3ee]"
             >
               <span className="relative z-10">See my work</span>
               <svg

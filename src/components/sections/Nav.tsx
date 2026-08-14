@@ -55,7 +55,7 @@ export default function Nav() {
               : "border-b border-transparent"
           }`}
         >
-          <nav className="container-x flex h-16 items-center justify-between md:h-[72px]">
+          <nav className="container-x flex h-16 items-center justify-between md:h-18">
             <a href="#top" className="group flex items-center gap-2.5" aria-label="Home">
               <span className="relative flex h-8 w-8 items-center justify-center rounded-lg border border-line-strong bg-surface">
                 <span className="font-mono text-[13px] font-bold text-accent">S</span>
