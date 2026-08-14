@@ -5,15 +5,28 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { profile, socials, stats } from "@/lib/data";
 import Magnetic from "@/components/ui/Magnetic";
+import { useCanRenderScene, usePrefersReducedMotion } from "@/lib/media";
 
 const Scene = dynamic(() => import("@/components/three/Scene"), {
   ssr: false,
-  loading: () => (
-    <div className="absolute inset-0 grid place-items-center">
-      <div className="h-40 w-40 animate-pulse rounded-full bg-accent/10 blur-3xl" />
-    </div>
-  ),
+  // Same painted backdrop while the chunk loads, so there is no flash of a
+  // different placeholder before the canvas takes over.
+  loading: () => <HeroBackdrop />,
 });
+
+/**
+ * Painted stand-in for the WebGL hero, used on phones, tablets and for
+ * reduced-motion visitors. Same palette and focal point as the 3D core, but
+ * it is pure CSS — no shaders, no render loop, no main-thread cost.
+ */
+function HeroBackdrop() {
+  return (
+    <div className="absolute inset-0 bg-void">
+      <div className="absolute inset-0 bg-[radial-gradient(58%_44%_at_62%_32%,#0b3a4f5c_0%,#08243a2e_46%,transparent_72%)]" />
+      <div className="absolute left-[62%] top-[32%] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-3xl" />
+    </div>
+  );
+}
 
 /** Two fixed lines so the headline never breaks awkwardly. */
 const headline = [
@@ -23,6 +36,9 @@ const headline = [
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const canRenderScene = useCanRenderScene();
+  const reduced = usePrefersReducedMotion();
+  const showScene = canRenderScene && !reduced;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -32,9 +48,9 @@ export default function Hero() {
 
   return (
     <section id="top" ref={ref} className="relative min-h-svh overflow-hidden">
-      {/* 3D layer */}
+      {/* 3D layer — only on large pointer-driven screens; see useCanRenderScene */}
       <motion.div className="absolute inset-0">
-        <Scene />
+        {showScene ? <Scene /> : <HeroBackdrop />}
       </motion.div>
 
       {/* readability + depth overlays */}

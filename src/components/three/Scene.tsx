@@ -91,7 +91,7 @@ export default function Scene() {
   return (
     <div ref={wrap} className="absolute inset-0">
       <Canvas
-        dpr={[1, 1.75]}
+        dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         camera={{ position: [0, 0, 7.4], fov: 45 }}
         frameloop={visible ? "always" : "demand"}
