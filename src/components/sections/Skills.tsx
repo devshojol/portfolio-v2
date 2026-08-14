@@ -7,7 +7,7 @@ import { skillGroups } from "@/lib/data";
 
 export default function Skills() {
   return (
-    <section id="skills" className="relative scroll-mt-24 py-24 md:py-32">
+    <section id="skills" className="relative scroll-mt-24 py-14 sm:py-20 md:py-24">
       <div className="container-x">
         <SectionHeading
           index="04"

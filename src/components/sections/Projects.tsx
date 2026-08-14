@@ -8,7 +8,7 @@ import { projects } from "@/lib/data";
 
 export default function Projects() {
   return (
-    <section id="projects" className="relative scroll-mt-24 py-24 md:py-32">
+    <section id="projects" className="relative scroll-mt-24 py-14 sm:py-20 md:py-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(55%_45%_at_85%_10%,#12294822,transparent_70%)]" />
       <div className="container-x">
         <SectionHeading

@@ -15,7 +15,7 @@ export default function Experience() {
   const lineScale = useTransform(scrollYProgress, [0, 1], [0, 1]);
 
   return (
-    <section id="work" className="relative scroll-mt-24 py-24 md:py-32">
+    <section id="work" className="relative scroll-mt-24 py-14 sm:py-20 md:py-24">
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(60%_50%_at_15%_0%,#0e2a4422,transparent_70%)]" />
       <div className="container-x">
         <SectionHeading
