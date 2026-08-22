@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
-import { profile, socials, stats } from "@/lib/data";
-import Magnetic from "@/components/ui/Magnetic";
-import { useCanRenderScene, usePrefersReducedMotion } from "@/lib/media";
+import dynamic from 'next/dynamic';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+import { profile, socials, stats } from '@/lib/data';
+import Magnetic from '@/components/ui/Magnetic';
+import { useCanRenderScene, usePrefersReducedMotion } from '@/lib/media';
 
-const Scene = dynamic(() => import("@/components/three/Scene"), {
+const Scene = dynamic(() => import('@/components/three/Scene'), {
   ssr: false,
   // Same painted backdrop while the chunk loads, so there is no flash of a
   // different placeholder before the canvas takes over.
@@ -30,8 +30,8 @@ function HeroBackdrop() {
 
 /** Two fixed lines so the headline never breaks awkwardly. */
 const headline = [
-  { words: ["I", "build", "interfaces"], accent: false },
-  { words: ["that", "feel", "right."], accent: true },
+  { words: ['I', 'build', 'interfaces'], accent: false },
+  { words: ['that', 'feel', 'right.'], accent: true },
 ];
 
 export default function Hero() {
@@ -41,7 +41,7 @@ export default function Hero() {
   const showScene = canRenderScene && !reduced;
   const { scrollYProgress } = useScroll({
     target: ref,
-    offset: ["start start", "end start"],
+    offset: ['start start', 'end start'],
   });
   const contentY = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.75], [1, 0]);
@@ -90,14 +90,14 @@ export default function Hero() {
                   className="mr-[0.26em] inline-block overflow-hidden pb-[0.08em] align-bottom"
                 >
                   <motion.span
-                    initial={{ y: "108%", opacity: 0 }}
+                    initial={{ y: '108%', opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{
                       duration: 0.9,
                       delay: 0.28 + (li * 4 + wi) * 0.075,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className={`inline-block ${line.accent ? "text-accent-soft" : "text-ink"}`}
+                    className={`inline-block ${line.accent ? 'text-accent-soft' : 'text-ink'}`}
                   >
                     {word}
                   </motion.span>
@@ -113,12 +113,10 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.85 }}
           className="mt-7 max-w-xl text-[15px] leading-relaxed text-ink-dim sm:text-base"
         >
-          I&apos;m <span className="text-ink">Shojol</span> — a frontend
-          developer. I turn ideas into polished, responsive experiences that{" "}
-          <span className="text-accent-soft">
-            look right, feel right, and work
-          </span>{" "}
-          reliably across web and mobile.
+          I&apos;m <span className="text-ink">Shojol</span> — a frontend developer. I turn ideas
+          into polished, responsive experiences that{' '}
+          <span className="text-accent-soft">look right, feel right, and work</span> reliably across
+          web and mobile.
         </motion.p>
 
         <motion.div
@@ -166,7 +164,7 @@ export default function Hero() {
               <a
                 key={s.label}
                 href={s.href}
-                target={s.href.startsWith("http") ? "_blank" : undefined}
+                target={s.href.startsWith('http') ? '_blank' : undefined}
                 rel="noreferrer"
                 aria-label={s.label}
                 className="grid h-10 w-10 place-items-center rounded-full border border-line text-ink-dim transition-all duration-300 hover:-translate-y-0.5 hover:border-accent/50 hover:text-accent"
@@ -185,10 +183,7 @@ export default function Hero() {
           className="mt-14 grid max-w-2xl grid-cols-2 gap-px overflow-hidden rounded-xl border border-line bg-line/60 sm:grid-cols-4"
         >
           {stats.map((s) => (
-            <div
-              key={s.label}
-              className="bg-night/70 px-4 py-4 backdrop-blur-sm"
-            >
+            <div key={s.label} className="bg-night/70 px-4 py-4 backdrop-blur-sm">
               <dt className="font-mono text-2xl font-semibold text-ink">
                 {s.value}
                 <span className="text-accent">{s.suffix}</span>
@@ -214,8 +209,8 @@ export default function Hero() {
         </span>
         <span className="relative h-9 w-px overflow-hidden bg-line-strong">
           <motion.span
-            animate={{ y: ["-100%", "100%"] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            animate={{ y: ['-100%', '100%'] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             className="absolute inset-x-0 h-4 bg-accent"
           />
         </span>
@@ -225,28 +220,16 @@ export default function Hero() {
 }
 
 function SocialIcon({ name }: { name: string }) {
-  if (name === "GitHub") {
+  if (name === 'GitHub') {
     return (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden
-      >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M12 .5C5.73.5.9 5.33.9 11.6c0 4.9 3.17 9.05 7.57 10.52.55.1.75-.24.75-.53v-1.9c-3.08.67-3.73-1.3-3.73-1.3-.5-1.3-1.23-1.64-1.23-1.64-1-.7.08-.68.08-.68 1.1.08 1.7 1.14 1.7 1.14.99 1.7 2.6 1.2 3.23.92.1-.72.39-1.2.7-1.48-2.46-.28-5.05-1.24-5.05-5.5 0-1.22.43-2.21 1.14-2.99-.11-.28-.5-1.42.1-2.96 0 0 .93-.3 3.05 1.14a10.5 10.5 0 0 1 5.56 0c2.12-1.44 3.05-1.14 3.05-1.14.6 1.54.22 2.68.11 2.96.71.78 1.14 1.77 1.14 2.99 0 4.27-2.6 5.21-5.07 5.49.4.35.76 1.03.76 2.08v3.08c0 .3.2.64.76.53a11.11 11.11 0 0 0 7.56-10.52C23.1 5.33 18.27.5 12 .5Z" />
       </svg>
     );
   }
-  if (name === "LinkedIn") {
+  if (name === 'LinkedIn') {
     return (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        aria-hidden
-      >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14Zm1.78 13.02H3.55V9h3.57v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z" />
       </svg>
     );
