@@ -3,14 +3,16 @@ import FolderButton from '@/components/design/FolderButton';
 import AnalogClock from '@/components/design/AnalogClock';
 
 import Navbar from '@/components/design/Navbar';
-import MountainBackdrop from '@/components/design/MountainBackdrop';
+import MeshGradient from '@/components/design/MeshGradient';
 import DesignCursor from '@/components/design/DesignCursor';
 import ProfileCard from '@/components/design/ProfileCard';
+import MountainBackdrop from '@/components/design/MountainBackdrop';
 
 function page() {
   return (
-    <main className="relative h-full max-h-screen min-h-screen w-full cursor-none! overflow-hidden">
-      <MountainBackdrop />
+    <main className="cursor-hidden relative h-full max-h-screen min-h-screen w-full overflow-hidden">
+      <MeshGradient />
+      {/* <MountainBackdrop /> */}
       <DesignCursor />
 
       <Navbar />

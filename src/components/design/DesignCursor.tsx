@@ -83,13 +83,40 @@ export default function DesignCursor() {
     >
       <div ref={reticleRef} className="absolute top-0 left-0 h-8 w-8 will-change-transform">
         <svg viewBox="0 0 32 32" className="h-full w-full">
-          <path d="M2 10V4a2 2 0 0 1 2-2h6" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M30 10V4a2 2 0 0 0-2-2h-6" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M2 22v6a2 2 0 0 0 2 2h6" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" />
-          <path d="M30 22v6a2 2 0 0 1-2 2h-6" fill="none" stroke="var(--color-accent)" strokeWidth="2" strokeLinecap="round" />
+          <path
+            d="M2 10V4a2 2 0 0 1 2-2h6"
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M30 10V4a2 2 0 0 0-2-2h-6"
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M2 22v6a2 2 0 0 0 2 2h6"
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+          <path
+            d="M30 22v6a2 2 0 0 1-2 2h-6"
+            fill="none"
+            stroke="var(--color-accent)"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
         </svg>
       </div>
-      <div ref={dotRef} className="bg-accent absolute top-0 left-0 h-1 w-1 rounded-full will-change-transform" />
+      <div
+        ref={dotRef}
+        className="bg-accent absolute top-0 left-0 h-1 w-1 rounded-full will-change-transform"
+      />
     </div>
   );
 }

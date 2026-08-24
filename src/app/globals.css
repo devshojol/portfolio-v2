@@ -31,6 +31,45 @@
   --animate-pulse-ring: pulse-ring 2.6s ease-out infinite;
   --animate-shimmer: shimmer 2.4s linear infinite;
   --animate-blink: blink 1.05s steps(2, start) infinite;
+  --animate-drift-a: drift-a 28s ease-in-out infinite;
+  --animate-drift-b: drift-b 36s ease-in-out infinite;
+  --animate-drift-c: drift-c 32s ease-in-out infinite;
+}
+
+/* Slow wander for the mesh-gradient blobs. Long, offset durations keep the
+   field from ever looking like it loops. */
+@keyframes drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(6%, -8%, 0) scale(1.12);
+  }
+  66% {
+    transform: translate3d(-5%, 5%, 0) scale(0.94);
+  }
+}
+@keyframes drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  40% {
+    transform: translate3d(-8%, 6%, 0) scale(1.08);
+  }
+  75% {
+    transform: translate3d(7%, 4%, 0) scale(0.92);
+  }
+}
+@keyframes drift-c {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(5%, 9%, 0) scale(1.15);
+  }
 }
 
 @keyframes marquee {
@@ -185,6 +224,25 @@ body {
   pointer-events: none;
   opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Custom-cursor surfaces ────────────────────────────── */
+/* `cursor: none` on a container is not inherited by elements that set their
+   own cursor — the UA stylesheet gives buttons `default` and links `pointer`,
+   so the native arrow reappears over them. This blankets the subtree, plus
+   html/body for the area outside the marked element.
+
+   Gated to exactly the conditions where the custom cursor actually renders
+   (>=md, fine pointer, motion allowed). Without that gate, a visitor on a
+   narrow window or with reduced-motion enabled would be left with no visible
+   cursor at all. */
+@media (min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:has(.cursor-hidden),
+  html:has(.cursor-hidden) body,
+  .cursor-hidden,
+  .cursor-hidden * {
+    cursor: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
