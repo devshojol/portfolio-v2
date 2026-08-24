@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { useHasFinePointer, usePrefersReducedMotion } from "@/lib/media";
 
 /**
@@ -16,7 +17,10 @@ export default function Cursor() {
 
   const finePointer = useHasFinePointer();
   const reduced = usePrefersReducedMotion();
-  const enabled = finePointer && !reduced;
+  // The /design sandbox has its own DesignCursor (a reticle) — two custom
+  // cursors rendered at once would fight each other visually.
+  const pathname = usePathname();
+  const enabled = finePointer && !reduced && !pathname?.startsWith("/design");
 
   useEffect(() => {
     if (!enabled) return;

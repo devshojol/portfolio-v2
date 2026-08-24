@@ -74,13 +74,13 @@ function EyesCursor({
 
   return (
     <div
-      className="from-line-strong to-line inline-flex items-center rounded-full bg-gradient-to-b p-[2px]"
+      className="from-line-strong to-line inline-flex items-center rounded-full bg-linear-to-b p-0.5"
       style={{
         boxShadow: '0 0 14px -2px var(--color-accent)',
       }}
     >
       <div
-        className={cn('flex items-center rounded-full px-3.5 py-2.5', className)}
+        className={cn('flex items-center rounded-full p-2 md:px-3.5 md:py-2.5', className)}
         style={{
           gap,
           background:
