@@ -74,14 +74,17 @@ export default function DesignCursor() {
 
   if (!enabled) return null;
 
+  // z-200 keeps the reticle above every overlay on the page — the folder
+  // window portals to <body> at z-120, and a cursor that vanishes over the
+  // one thing you are pointing at is worse than no custom cursor at all.
   return (
     <div
       ref={wrapRef}
       aria-hidden
       style={{ opacity: 0 }}
-      className="pointer-events-none fixed inset-0 z-100 hidden transition-opacity duration-300 md:block"
+      className="pointer-events-none fixed inset-0 z-200 hidden transition-opacity duration-300 md:block"
     >
-      <div ref={reticleRef} className="absolute top-0 left-0 h-8 w-8 will-change-transform">
+      <div ref={reticleRef} className="absolute top-0 left-0 z-999 h-8 w-8 will-change-transform">
         <svg viewBox="0 0 32 32" className="h-full w-full">
           <path
             d="M2 10V4a2 2 0 0 1 2-2h6"
