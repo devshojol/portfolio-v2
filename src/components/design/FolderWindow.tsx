@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { AnimatePresence, motion } from 'motion/react';
+import { AnimatePresence, motion, useDragControls } from 'motion/react';
 import { LuFolder, LuMaximize, LuMinimize, LuMinus, LuX } from 'react-icons/lu';
 import DragAble from './DragAble';
 import { cn } from '@/utils/cn';
@@ -59,6 +59,9 @@ export default function FolderWindow({
 }) {
   const mounted = useIsClient();
   const [full, setFull] = useState(false);
+  // Drags start from the title bar only, so the body keeps its own scrolling
+  // and clicks — same as a real window.
+  const dragControls = useDragControls();
 
   const toggleFull = () => setFull((v) => !v);
 
@@ -115,7 +118,11 @@ export default function FolderWindow({
         onClick={onClose}
       />
 
-      <DragAble disabled={full} className={cn('relative', full && 'h-full w-full')}>
+      <DragAble
+        disabled={full}
+        controls={dragControls}
+        className={cn('relative', full && 'h-full w-full')}
+      >
         <motion.div
           layoutId={layoutId}
           transition={SPRING}
@@ -130,6 +137,13 @@ export default function FolderWindow({
           <div
             className="border-line-strong bg-elevated/70 relative flex h-11 shrink-0 items-center border-b px-3"
             onDoubleClick={toggleFull}
+            onPointerDown={(e) => {
+              // A full-screen window has nowhere to go, and pressing a traffic
+              // light should stay a press rather than arming a drag.
+              if (full) return;
+              if ((e.target as HTMLElement).closest('button')) return;
+              dragControls.start(e);
+            }}
           >
             <div className="group/lights flex items-center gap-2">
               {lights.map((light) => (
@@ -158,6 +172,10 @@ export default function FolderWindow({
 
           {/* ── Body ──────────────────────────────────────────────── */}
           <motion.div
+            // Lenis puts a non-passive wheel listener on window and
+            // preventDefault()s it, which starves every nested scroll
+            // container on the page. This opts the window body back out.
+            data-lenis-prevent
             className="min-h-0 flex-1 overflow-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

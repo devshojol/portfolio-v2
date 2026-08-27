@@ -1,16 +1,24 @@
 'use client';
 import React, { useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, type DragControls } from 'motion/react';
 
 function DragAble({
   children,
   className,
   disabled = false,
+  controls,
 }: {
   children: React.ReactNode;
   className?: string;
   /** Turns dragging off and returns the element to where layout put it. */
   disabled?: boolean;
+  /**
+   * Pass a `useDragControls()` handle to drag from one specific grip instead
+   * of the whole surface — a window title bar, say. Supplying this switches
+   * off the built-in listener, so the rest of the element is left alone and
+   * can scroll and be clicked normally.
+   */
+  controls?: DragControls;
 }) {
   // Motion only suppresses the post-drag click on the dragging element's own
   // handler. Ours sit on children (the folder button, the window's title-bar
@@ -21,6 +29,8 @@ function DragAble({
   return (
     <motion.div
       drag={!disabled}
+      dragListener={!controls}
+      dragControls={controls}
       dragMomentum={false}
       // Dragging leaves an x/y transform behind. Without this, a window that
       // was dragged into a corner would still be offset by that much when it

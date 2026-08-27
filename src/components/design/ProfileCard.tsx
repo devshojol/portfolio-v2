@@ -28,13 +28,13 @@ function ProfileCard() {
           <div className="bg-accent/15 pointer-events-none absolute -top-10 -right-10 h-40 w-40 rounded-full blur-3xl" />
 
           <h3 className="relative text-left font-sans text-xl leading-snug font-bold text-white">
-            I&apos;m {profile.firstName}, a {profile.role} for Reliable Web and App
+            Hi, I&apos;m {profile.firstName}, a {profile.role} for Reliable Web and App
           </h3>
 
           <p className="relative mt-3 text-left text-[13px] leading-relaxed text-white/80">
-            I build modern, reliable web and mobile experiences using{' '}
-            <strong className="text-white">React, React Native,</strong> and TypeScript, with
-            Node.js and MongoDB on the backend.
+            If you are looking for a modern, reliable web and mobile experiences using
+            <strong className="text-white"> React, React Native,</strong> with Node.js and MongoDB
+            on the backend, you are in the right place!
           </p>
 
           {telegram && (
