@@ -58,7 +58,7 @@ export default function FolderWindow({
   children?: React.ReactNode;
 }) {
   const mounted = useIsClient();
-  const [full, setFull] = useState(false);
+  const [full, setFull] = useState(true);
   // Drags start from the title bar only, so the body keeps its own scrolling
   // and clicks — same as a real window.
   const dragControls = useDragControls();
