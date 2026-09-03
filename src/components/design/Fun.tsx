@@ -2,7 +2,6 @@
 
 import { Canvas } from '@react-three/fiber';
 import { useEffect, useState } from 'react';
-
 import LaptopAnimation from './LaptopAnimation';
 
 function Fun() {

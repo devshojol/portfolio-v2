@@ -46,6 +46,7 @@ function Laptop() {
   // Looked up once and held in a ref — `getObjectByName` walks the graph, so
   // calling it per frame would re-traverse the whole model 60 times a second.
   const screenRef = useRef<THREE.Object3D | null>(null);
+  const laptopRef = useRef<THREE.Group | null>(null);
 
   useLayoutEffect(() => {
     screenRef.current = scene.getObjectByName('screen') ?? null;
@@ -62,13 +63,18 @@ function Laptop() {
 
   useFrame(() => {
     const screen = screenRef.current;
-    if (!screen) return;
+    if (!screen || !laptopRef.current) return;
     // Closed at 180°, opening to 90° across the full scroll.
+    const offset = data?.offset;
     screen.rotation.x = THREE.MathUtils.degToRad(180 - data.offset * 90);
+
+    const rotationX = THREE.MathUtils.lerp(THREE.MathUtils.degToRad(-50), 0, offset);
+
+    laptopRef.current.rotation.y = rotationX;
   });
 
   return (
-    <group position={[0, -10, 20]}>
+    <group ref={laptopRef} position={[0, -10, 20]}>
       <primitive object={scene} />
     </group>
   );
