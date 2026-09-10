@@ -10,6 +10,7 @@ import ProfileCard from '@/components/design/ProfileCard';
 import Projects from '@/components/design/Projects';
 import Fun from '@/components/design/Fun';
 import Office from '@/components/design/Office/Office';
+import Sword from '@/components/design/Sword/Sword';
 import GsapAnimation from '@/components/design/GsapAnimation';
 
 function Design() {
@@ -37,6 +38,9 @@ function Design() {
       </FolderButton>
       <FolderButton className="absolute top-100 right-100 z-10" name="GSAP Animations">
         <GsapAnimation />
+      </FolderButton>
+      <FolderButton className="absolute top-60 left-1/2 z-10" name="Sword">
+        <Sword />
       </FolderButton>
       <ProfileCard />
     </main>

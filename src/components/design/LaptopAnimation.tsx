@@ -8,11 +8,13 @@ import * as THREE from 'three';
 const MODEL_URL = '/mac.glb';
 const MATTE_TEXTURE_URL = '/red.jpg';
 
-/**
- * `traverse` hands back plain `Object3D`s, which have no `material`. This
- * narrows to the one shape we actually want to write to — a mesh whose
- * material is a single standard material, not an array of them.
- */
+// Sequential scroll phases: [start, distance] in 0..1 of the total scroll.
+// Each one only starts moving once the previous has finished.
+const PHASE_SPIN_Y = [0, 0.5] as const;
+const PHASE_OPEN_LID = [0.5, 0.5] as const;
+
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
 function isStandardMesh(
   object: THREE.Object3D | undefined | null
 ): object is THREE.Mesh & { material: THREE.MeshStandardMaterial } {
@@ -27,24 +29,16 @@ function Laptop() {
   const { scene } = useGLTF(MODEL_URL);
   const loadedTexture = useTexture(MATTE_TEXTURE_URL);
 
-  // Configured on a clone, not on what `useTexture` handed back: that cache is
-  // keyed by URL and shared, so flipping settings on it would follow the
-  // texture to every other consumer.
   const matteMap = useMemo(() => {
     const map = loadedTexture.clone();
-    // glTF meshes carry un-flipped UVs, and a colour map has to be tagged as
-    // sRGB or it renders washed out.
     map.flipY = false;
     map.colorSpace = THREE.SRGBColorSpace;
     map.needsUpdate = true;
     return map;
   }, [loadedTexture]);
-  // Real value rather than null: this component only ever renders as a child
-  // of <ScrollControls>, which is what provides the context.
+
   const data = useScroll();
 
-  // Looked up once and held in a ref — `getObjectByName` walks the graph, so
-  // calling it per frame would re-traverse the whole model 60 times a second.
   const screenRef = useRef<THREE.Object3D | null>(null);
   const laptopRef = useRef<THREE.Group | null>(null);
 
@@ -63,14 +57,19 @@ function Laptop() {
 
   useFrame(() => {
     const screen = screenRef.current;
-    if (!screen || !laptopRef.current) return;
-    // Closed at 180°, opening to 90° across the full scroll.
-    const offset = data?.offset;
-    screen.rotation.x = THREE.MathUtils.degToRad(180 - data.offset * 90);
+    const laptop = laptopRef.current;
+    if (!screen || !laptop || !data) return;
 
-    const rotationX = THREE.MathUtils.lerp(THREE.MathUtils.degToRad(-50), 0, offset);
+    // range() clamps: 0 before its window, 1 after it — that is what makes the
+    // phases run one after the other instead of all at once.
+    const spinY = easeInOutCubic(data.range(...PHASE_SPIN_Y));
+    const openLid = easeInOutCubic(data.range(...PHASE_OPEN_LID));
 
-    laptopRef.current.rotation.y = rotationX;
+    // Phase 1 — turn to face the camera.
+    laptop.rotation.y = THREE.MathUtils.lerp(THREE.MathUtils.degToRad(-50), 0, spinY);
+
+    // Phase 2 — lid swings open.
+    screen.rotation.x = THREE.MathUtils.degToRad(180 - openLid * 90);
   });
 
   return (
@@ -86,9 +85,7 @@ export default function LaptopAnimation() {
       <Environment
         files={['https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/studio_small_09_4k.exr']}
       />
-      {/* `useScroll` reads context, so anything using it must be a child of
-          this — not the component that renders it. */}
-      <ScrollControls pages={3}>
+      <ScrollControls pages={2}>
         <Laptop />
       </ScrollControls>
     </>
