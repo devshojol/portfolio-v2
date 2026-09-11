@@ -1,0 +1,261 @@
+/* ─────────────────────────────────────────────────────────────
+   /avengers — a tactical-readout skin laid over the footage.
+   Scoped to `.av` so nothing here leaks into the main portfolio.
+   ───────────────────────────────────────────────────────────── */
+
+.av {
+  --gamma: #a3ff3c;
+  --gamma-soft: #d8ff9c;
+  --gamma-deep: #3f6b0d;
+  --gold: #f0b13a;
+  --alert: #ff4a3d;
+  --paper: #eef4e9;
+  --paper-dim: #a3b29c;
+  --ink: #04070a;
+
+  color: var(--paper);
+}
+
+.av ::selection {
+  background: color-mix(in srgb, var(--gamma) 42%, transparent);
+  color: #04070a;
+}
+
+.av-mono {
+  font-family: var(--font-mono);
+}
+
+/* Small caps-locked readout label — the page's connective tissue. */
+.av-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gamma);
+}
+
+.av-title {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.av-glow {
+  text-shadow:
+    0 0 30px rgba(163, 255, 60, 0.28),
+    0 2px 18px rgba(0, 0, 0, 0.85);
+}
+
+.av-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--gamma) 55%, transparent);
+}
+
+/* Frosted dossier panel. Kept dark because the footage behind it is busy. */
+.av-panel {
+  position: relative;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #04070a 62%, transparent),
+    color-mix(in srgb, #04070a 78%, transparent)
+  );
+  backdrop-filter: blur(8px) saturate(125%);
+  -webkit-backdrop-filter: blur(8px) saturate(125%);
+  border: 1px solid color-mix(in srgb, var(--gamma) 18%, transparent);
+}
+
+/* Corner brackets, drawn with borders on two pseudo-elements. */
+.av-bracket::before,
+.av-bracket::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--gamma);
+  pointer-events: none;
+}
+.av-bracket::before {
+  top: -1px;
+  left: -1px;
+  border-right: 0;
+  border-bottom: 0;
+}
+.av-bracket::after {
+  right: -1px;
+  bottom: -1px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.av-chip {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  border: 1px solid color-mix(in srgb, var(--gamma) 22%, transparent);
+  background: color-mix(in srgb, #04070a 55%, transparent);
+  padding: 0.3rem 0.6rem;
+  transition:
+    color 0.35s ease,
+    border-color 0.35s ease,
+    background-color 0.35s ease;
+}
+.av-chip:hover {
+  color: var(--gamma-soft);
+  border-color: color-mix(in srgb, var(--gamma) 60%, transparent);
+  background: color-mix(in srgb, var(--gamma) 10%, transparent);
+}
+
+/* CRT-ish line texture over the video — subtle, just enough to unify grain. */
+.av-scan {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.05) 0 1px,
+    transparent 1px 3px
+  );
+}
+
+.av-grid {
+  background-image:
+    linear-gradient(to right, rgba(163, 255, 60, 0.14) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(163, 255, 60, 0.14) 1px, transparent 1px);
+  background-size: 88px 88px;
+  mask-image: radial-gradient(80% 70% at 50% 50%, #000 10%, transparent 75%);
+  -webkit-mask-image: radial-gradient(80% 70% at 50% 50%, #000 10%, transparent 75%);
+}
+
+/* Impact feedback for the page body when the loading screen breaks. */
+@keyframes av-shake {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  12% {
+    transform: translate3d(-14px, 8px, 0) rotate(-0.4deg);
+  }
+  26% {
+    transform: translate3d(12px, -10px, 0) rotate(0.35deg);
+  }
+  42% {
+    transform: translate3d(-9px, -6px, 0);
+  }
+  58% {
+    transform: translate3d(7px, 6px, 0) rotate(-0.2deg);
+  }
+  76% {
+    transform: translate3d(-4px, 3px, 0);
+  }
+  90% {
+    transform: translate3d(2px, -2px, 0);
+  }
+}
+.av-shake {
+  animation: av-shake 0.62s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* Slow pulse on the live/standby dots. */
+@keyframes av-blip {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(163, 255, 60, 0.55);
+  }
+  70% {
+    opacity: 0.55;
+    box-shadow: 0 0 0 7px rgba(163, 255, 60, 0);
+  }
+}
+.av-blip {
+  animation: av-blip 2.4s ease-out infinite;
+}
+
+/* SplitText writes inline-block wrappers; keep them from breaking mid-word. */
+.av .split-line,
+.av .split-word {
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .av-shake,
+  .av-blip {
+    animation: none !important;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Narrow *and* short viewports — a phone in a small window, an
+   iPhone SE — can't park a whole dossier on one screen. There the
+   panels flow past the footage instead of sticking, so nothing is
+   clipped; wide screens keep the parked layout, where the two-column
+   panels fit comfortably.
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 1023px) and (max-height: 760px) {
+  .av-slot {
+    position: relative !important;
+    height: auto !important;
+    min-height: 100svh;
+    padding-top: 4.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  /* The deck has no parked frame to swap cards inside of, so both
+     projects are simply stacked and the scripted crossfade is undone. */
+  .av-deck {
+    display: block;
+  }
+  .av-deck > [data-card] {
+    grid-area: auto !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    pointer-events: auto !important;
+  }
+  .av-deck > [data-card] + [data-card] {
+    margin-top: 3.5rem;
+  }
+  .av-deck-progress {
+    display: none;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Short viewports that are still wide enough for the parked
+   layout — most laptops — get a smaller header, less padding and
+   no identity plate, so a full panel still clears the readout.
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .av-slot {
+    padding-top: 4rem;
+    padding-bottom: 2.75rem;
+  }
+  .av-head {
+    margin-bottom: 1.25rem;
+  }
+  .av-head h2 {
+    font-size: clamp(1.6rem, 4.4vw, 2.8rem);
+  }
+  .av-hud-id {
+    display: none;
+  }
+}
+
+/* The footage is graded lighter than a text background normally would be, so
+   legibility is carried by the copy itself rather than by darkening the whole
+   frame — a shadow tight enough to lift any panel off busy rubble. */
+.av-slot,
+[data-hero-panel] {
+  text-shadow:
+    0 1px 10px rgba(4, 7, 10, 0.92),
+    0 0 34px rgba(4, 7, 10, 0.7);
+}
+
+/* Inputs and framed panels have a ground of their own and don't want it. */
+.av-panel input,
+.av-panel textarea,
+.av-panel button {
+  text-shadow: none;
+}
