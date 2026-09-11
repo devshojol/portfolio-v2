@@ -2,7 +2,6 @@
 
 import { useRef, useState } from 'react';
 import SectionShell from '../SectionShell';
-import PhoneMock from '@/components/ui/PhoneMock';
 import { gsap, useGSAP } from '../gsap';
 import { projects } from '@/lib/data';
 
@@ -71,71 +70,63 @@ function Deck() {
             style={{ gridArea: '1 / 1' }}
             className={i === index ? '' : 'pointer-events-none'}
           >
-            <div className="grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-14">
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="av-mono text-[11px] tracking-[0.24em] text-[var(--gamma)]">
-                    0{i + 1}
-                  </span>
-                  <span className="h-px w-10 bg-[var(--gamma)]/40" />
-                  <span className="av-mono text-[11px] tracking-[0.2em] text-[var(--paper-dim)]">
-                    {p.year} · Shipped
-                  </span>
-                </div>
-
-                <h3 className="av-title mt-4 text-[clamp(1.9rem,5vw,3.2rem)] text-[var(--paper)]">
-                  {p.name}
-                </h3>
-                <p className="av-mono mt-2 text-[11px] tracking-[0.2em] text-[var(--gamma-soft)] uppercase">
-                  {p.subtitle}
-                </p>
-
-                <p className="mt-5 max-w-xl text-[14.5px] leading-relaxed text-[var(--paper)]/85">
-                  {p.blurb}
-                </p>
-
-                <ul className="mt-5 space-y-2">
-                  {p.highlights.map((h) => (
-                    <li
-                      key={h}
-                      className="flex items-start gap-3 text-[13.5px] text-[var(--paper-dim)]"
-                    >
-                      <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rotate-45 bg-[var(--gamma)]/80" />
-                      {h}
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {p.stack.map((t) => (
-                    <span key={t} className="av-chip">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-6 flex flex-wrap gap-3">
-                  {p.links.map((l) => (
-                    <a
-                      key={l.label}
-                      href={l.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="av-mono group inline-flex items-center gap-2 border border-[var(--gamma)]/40 px-4 py-2 text-[11px] tracking-[0.2em] text-[var(--paper)] uppercase transition-all duration-300 hover:border-[var(--gamma)] hover:bg-[var(--gamma)]/12 hover:text-[var(--gamma-soft)]"
-                    >
-                      {l.label}
-                      <span className="transition-transform duration-300 group-hover:translate-x-0.5">
-                        ↗
-                      </span>
-                    </a>
-                  ))}
-                </div>
+            <div className="max-w-2xl">
+              <div className="flex items-center gap-3">
+                <span className="av-mono text-[11px] tracking-[0.24em] text-[var(--gamma)]">
+                  0{i + 1}
+                </span>
+                <span className="h-px w-10 bg-[var(--gamma)]/40" />
+                <span className="av-mono text-[11px] tracking-[0.2em] text-[var(--paper-dim)]">
+                  {p.year} · Shipped
+                </span>
               </div>
 
-              {/* Scaled down a touch: at full size the mock, not the copy,
-                  would decide how tall the parked panel is. */}
-              <div className="hidden origin-center scale-[0.82] lg:block xl:scale-95">
-                <PhoneMock variant={p.id as 'gonit' | 'chintu'} />
+              <h3 className="av-title mt-4 text-[clamp(1.9rem,5vw,3.2rem)] text-[var(--paper)]">
+                {p.name}
+              </h3>
+              <p className="av-mono mt-2 text-[11px] tracking-[0.2em] text-[var(--gamma-soft)] uppercase">
+                {p.subtitle}
+              </p>
+
+              <p className="mt-5 max-w-xl text-[14.5px] leading-relaxed text-[var(--paper)]/85">
+                {p.blurb}
+              </p>
+
+              <ul className="mt-5 space-y-2">
+                {p.highlights.map((h) => (
+                  <li
+                    key={h}
+                    className="flex items-start gap-3 text-[13.5px] text-[var(--paper-dim)]"
+                  >
+                    <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rotate-45 bg-[var(--gamma)]/80" />
+                    {h}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 flex flex-wrap gap-2">
+                {p.stack.map((t) => (
+                  <span key={t} className="av-chip">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                {p.links.map((l) => (
+                  <a
+                    key={l.label}
+                    href={l.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="av-mono group inline-flex items-center gap-2 border border-[var(--gamma)]/40 px-4 py-2 text-[11px] tracking-[0.2em] text-[var(--paper)] uppercase transition-all duration-300 hover:border-[var(--gamma)] hover:bg-[var(--gamma)]/12 hover:text-[var(--gamma-soft)]"
+                  >
+                    {l.label}
+                    <span className="transition-transform duration-300 group-hover:translate-x-0.5">
+                      ↗
+                    </span>
+                  </a>
+                ))}
               </div>
             </div>
           </article>
