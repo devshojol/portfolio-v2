@@ -10,12 +10,10 @@ type Phase = 'playing' | 'holding' | 'leaving';
 export default function AssembleLoader({
   progress,
   ready,
-  onArmSound,
   onComplete,
 }: {
   progress: number;
   ready: boolean;
-  onArmSound: () => void;
   onComplete: () => void;
 }) {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -24,19 +22,7 @@ export default function AssembleLoader({
 
   const reduced = usePrefersReducedMotion();
   const [phase, setPhase] = useState<Phase>('playing');
-  const [armed, setArmed] = useState(false);
   const percent = Math.round(progress * 100);
-
-  /* The cut starts by itself the moment this screen clears, and a browser will
-     only let it be audible if someone has interacted first. So the loading
-     screen is the gesture surface: one tap anywhere, while the footage is
-     still downloading, buys the sound. Ignoring it costs nothing — the cut
-     runs silently and the transport offers to turn it on. */
-  const arm = () => {
-    if (armed) return;
-    setArmed(true);
-    onArmSound();
-  };
 
   /* Autoplay is muted + inline so it is allowed everywhere, but a blocked or
      broken clip must not strand the visitor on a loading screen. */
@@ -105,12 +91,11 @@ export default function AssembleLoader({
   return (
     <div
       ref={rootRef}
-      className="av fixed inset-0 z-[120] cursor-pointer overflow-hidden bg-black"
+      className="av fixed inset-0 z-[120] overflow-hidden bg-black"
       style={{ clipPath: 'inset(0% 0% 0% 0%)' }}
       role="status"
       aria-live="polite"
       aria-label={`Loading — ${percent}%`}
-      onPointerDown={arm}
     >
       <video
         ref={videoRef}
@@ -120,17 +105,13 @@ export default function AssembleLoader({
         autoPlay
         preload="auto"
         disablePictureInPicture
-        /* The tap that grants the sound has to land on the screen, not on the
-           clip: a click delivered to a video element is a play/pause toggle in
-           some browsers, which would stop the footage mid-punch. */
+        /* Untouchable, and re-started if something stops it anyway: a click
+           delivered to a video element is a play/pause toggle in some
+           browsers, and this clip has to reach its last frame. */
         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
         style={{ filter: 'brightness(0.92) contrast(1.04) saturate(0.98)' }}
         onEnded={() => setPhase((p) => (p === 'playing' ? 'holding' : p))}
         onError={() => setPhase((p) => (p === 'playing' ? 'holding' : p))}
-        /* Nothing should stop this clip before its last frame, and a stray
-           pause is easy to come by — some browsers toggle playback on a click
-           anywhere near the media, which is a problem on a screen whose whole
-           surface invites a tap. */
         onPause={(e) => {
           const video = e.currentTarget;
           if (phase === 'playing' && !video.ended) video.play().catch(() => {});
@@ -174,18 +155,6 @@ export default function AssembleLoader({
           <div className="av-mono mt-3 flex justify-between gap-4 text-[10px] tracking-[0.22em] text-[var(--paper-dim)] uppercase">
             <span>Decrypting 47.6 MB of footage</span>
             <span>{phase === 'playing' ? 'Stand by' : ready ? 'Ready' : 'Holding'}</span>
-          </div>
-
-          <div
-            className={`av-mono mt-6 text-center text-[10px] tracking-[0.28em] uppercase transition-colors duration-500 ${
-              armed ? 'text-[var(--gamma)]' : 'text-[var(--paper)]'
-            }`}
-          >
-            {armed ? (
-              <>Sound armed — the cut plays itself</>
-            ) : (
-              <span className="animate-pulse">Tap anywhere to play it with sound</span>
-            )}
           </div>
         </div>
       </div>

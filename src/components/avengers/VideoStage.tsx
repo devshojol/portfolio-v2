@@ -68,7 +68,13 @@ export default function VideoStage({
         if (!video) return;
         video
           .play()
-          .then(() => video.pause())
+          .then(() => {
+            /* Unless the cut has started in the meantime — this promise
+               settles a moment after the click, and pausing then would land on
+               top of the playback it was meant to enable, aborting it and
+               reading back as a refusal to play the sound. */
+            if (!cinemaRef.current) video.pause();
+          })
           .catch(() => {});
       });
     },

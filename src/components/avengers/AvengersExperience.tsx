@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CLIPS } from './config';
 import { useVideoPreload } from './useVideoPreload';
-import { usePrefersReducedMotion } from '@/lib/media';
 import { gsap, ScrollTrigger } from './choreography';
 import AssembleLoader from './AssembleLoader';
 import VideoStage, { type StageHandle } from './VideoStage';
@@ -29,7 +28,6 @@ import AvOutro from './sections/AvOutro';
  */
 export default function AvengersExperience() {
   const { progress, sources } = useVideoPreload({ hero: CLIPS.hero, all: CLIPS.all });
-  const reduced = usePrefersReducedMotion();
   const stage = useRef<StageHandle>(null);
   const [started, setStarted] = useState(false);
   const [cinema, setCinema] = useState(false);
@@ -90,19 +88,15 @@ export default function AvengersExperience() {
   const endCinema = useCallback(() => setCinema(false), []);
   const blockSound = useCallback(() => setSoundBlocked(true), []);
 
-  /* The cut runs itself as soon as the loading screen clears — the visitor
-     arrives on a playing page rather than an instruction. Not for anyone who
-     has asked for less motion, though: a page that scrolls itself is exactly
-     what that setting is about. */
-  const openPage = useCallback(() => {
-    setStarted(true);
-    if (!reduced) setCinema(true);
-  }, [reduced]);
-
   const toggleCinema = useCallback(() => {
     setSoundBlocked(false);
-    setCinema((c) => !c);
-  }, []);
+    /* Armed here in the click handler itself rather than in a state updater or
+       the effect that starts playback: both of those run after the gesture is
+       over, and a browser only grants audible playback to an element it saw
+       played during one. */
+    if (!cinema) stage.current?.armSound();
+    setCinema(!cinema);
+  }, [cinema]);
 
   const enableSound = useCallback(() => {
     stage.current?.enableSound();
@@ -145,8 +139,7 @@ export default function AvengersExperience() {
         <AssembleLoader
           progress={progress}
           ready={Boolean(sources)}
-          onArmSound={() => stage.current?.armSound()}
-          onComplete={openPage}
+          onComplete={() => setStarted(true)}
         />
       )}
     </div>
