@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import Lenis from "lenis";
-import { usePrefersReducedMotion } from "@/lib/media";
+import { useEffect } from 'react';
+import Lenis from 'lenis';
+import { usePrefersReducedMotion } from '@/lib/media';
 
 /**
  * The live instance, for the rare caller that has to drive the scroll itself
@@ -37,19 +37,23 @@ export default function SmoothScroll({ children }: { children: React.ReactNode }
 
     // Anchor links routed through Lenis for a smooth glide
     const onClick = (e: MouseEvent) => {
+      // A component may have handled this anchor itself — sticky sections
+      // can't be located by their rect, so /v2 resolves those targets on its
+      // own. Re-handling here would animate to a second, wrong position.
+      if (e.defaultPrevented) return;
       const anchor = (e.target as HTMLElement)?.closest?.('a[href^="#"]');
       if (!anchor) return;
-      const id = anchor.getAttribute("href");
-      if (!id || id === "#") return;
+      const id = anchor.getAttribute('href');
+      if (!id || id === '#') return;
       const el = document.querySelector(id);
       if (!el) return;
       e.preventDefault();
       lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1.25 });
     };
 
-    document.addEventListener("click", onClick);
+    document.addEventListener('click', onClick);
     return () => {
-      document.removeEventListener("click", onClick);
+      document.removeEventListener('click', onClick);
       cancelAnimationFrame(frame);
       lenis.destroy();
       current = null;

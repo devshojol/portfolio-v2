@@ -1,0 +1,116 @@
+/* Scoped to the /v2 tree so none of it can leak into the main page, which
+   runs a different palette and type scale. */
+
+.v2 {
+  /* The reference is signal red on black; this swaps in the site's own
+     cyan and keeps the black. One token, so a re-colour is a one-line change. */
+  --v2-accent: #22d3ee;
+  --v2-accent-deep: #0891b2;
+  --v2-ink: #000000;
+  --v2-paper: #05060a;
+  --v2-muted: #8b93a1;
+
+  background: var(--v2-paper);
+  color: #f4f6fa;
+  cursor: auto;
+}
+
+/* Hides the scrollbar on this page only.
+   `globals.css` styles a 10px gradient scrollbar for the whole site, so this
+   has to out-specify a bare `::-webkit-scrollbar` on the element that actually
+   scrolls — hence `html:has(.v2)` rather than a rule under `.v2`, which could
+   never reach the root scroller. The same `:has()` trick is already used for
+   the custom cursor in globals.css.
+
+   Nothing becomes unreachable: Lenis still drives wheel, touch and keyboard
+   scrolling, and the progress bar pinned to the top edge keeps some sense of
+   position. */
+html:has(.v2),
+html:has(.v2) body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* legacy Edge */
+}
+html:has(.v2)::-webkit-scrollbar,
+html:has(.v2) body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/* Heavy grotesk for every display line. Inter carries no width axis, so the
+   condensed feel comes from negative tracking rather than font-stretch — the
+   native condensed faces are tried first for anyone who has them. */
+.v2-display {
+  font-family:
+    'Helvetica Neue Condensed Bold', 'HelveticaNeue-CondensedBold', var(--font-inter),
+    'Helvetica Neue', Arial, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.052em;
+  line-height: 0.8;
+}
+
+/* Small all-caps labels: the (01) / (About Me) / © 2026 rail and buttons. */
+.v2-label {
+  font-family: var(--font-inter), 'Helvetica Neue', Arial, sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.6875rem;
+}
+
+/* One gutter for the whole page, so the nav, the rails, the work grid and the
+   contact columns all line up on the same edge at every width. The full-bleed
+   pieces — the hero field and the two giant wordmarks — deliberately sit
+   outside it. The max-width only bites on very large displays; below that the
+   layout stays edge-to-edge the way the reference is. */
+.v2-container {
+  width: 100%;
+  max-width: 108rem;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 768px) {
+  .v2-container {
+    padding-inline: 2.5rem;
+  }
+}
+
+/* The dark block's bottom edge — the one that travels up to uncover the pinned
+   contact panel. The angle is written per frame by SlantFloor.tsx, so the edge
+   starts flat as the reveal begins and opens as the block rides up, matching
+   the wedge at the top. Defaults to flat, which is what renders server-side. */
+.v2-slant-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--v2-slant-now, 0px)), 0 100%);
+}
+
+.v2-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 1px;
+  transition: background-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v2-underline:hover {
+  background-size: 100% 1px;
+}
+
+/* Marquee strip above the contact lockup. The track holds two identical
+   halves, so translating by -50% loops seamlessly. */
+@keyframes v2-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.v2-drift {
+  animation: v2-drift 42s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-drift {
+    animation: none;
+  }
+}
