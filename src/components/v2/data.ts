@@ -18,6 +18,16 @@ export const navLinks: NavLink[] = [
 /** Uppercased for the hero wordmark and the closing lockup. */
 export const wordmark = profile.firstName.toUpperCase();
 
+/**
+ * The same wordmark broken in half. On a phone the single line only fills a
+ * shallow band and leaves the hero looking empty; stacked, it fills the lower
+ * half the way the reference's does.
+ */
+export const wordmarkLines = [
+  wordmark.slice(0, Math.ceil(wordmark.length / 2)),
+  wordmark.slice(Math.ceil(wordmark.length / 2)),
+] as const;
+
 export const statement =
   'Building interfaces with care and curiosity. React on the web, React Native on mobile, and whatever it takes in between to make a screen feel obvious';
 

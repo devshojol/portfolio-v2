@@ -6,7 +6,7 @@ import { profile } from '@/lib/data';
 import HeroDim from './HeroDim';
 import { MOODS, MoodFigure } from './Doodles';
 import FitText from './FitText';
-import { navLinks, wordmark } from './data';
+import { navLinks, wordmark, wordmarkLines } from './data';
 import { onJump } from './jump';
 
 /**
@@ -30,12 +30,12 @@ export default function Hero() {
           than the nav floating above the whole page. */}
       <header
         onClick={(e) => e.stopPropagation()}
-        className="v2-container flex items-center justify-between pt-6 md:pt-8"
+        className="v2-container flex justify-between pt-6 md:items-center md:pt-8"
       >
-        <a href="#v2-home" onClick={onJump('#v2-home')} className="v2-display text-lg md:text-2xl">
+        <a href="#v2-home" onClick={onJump('#v2-home')} className="v2-display text-xl md:text-2xl">
           {wordmark}
         </a>
-        <nav className="flex items-center gap-3 md:gap-12">
+        <nav className="flex flex-col items-end gap-1.5 md:flex-row md:items-center md:gap-12">
           {navLinks.map((l) => (
             <a
               key={l.label}
@@ -74,7 +74,15 @@ export default function Hero() {
           </div>
 
           <h1>
-            <FitText text={wordmark} />
+            {/* Only one of these is ever displayed, so screen readers still
+                see the name once. */}
+            <span className="block md:hidden">
+              {/* <FitText text={['SH', 'OJOL']} maxVh={46} /> */}
+              <FitText text={wordmarkLines} maxVh={46} />
+            </span>
+            <span className="hidden md:block">
+              <FitText text={wordmark} />
+            </span>
           </h1>
         </div>
 

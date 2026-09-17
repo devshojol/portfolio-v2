@@ -13,11 +13,36 @@ import { getLenis } from '@/components/SmoothScroll';
  * the end of it.
  */
 function targetFor(href: string): number | null {
+  const bottom = document.documentElement.scrollHeight - window.innerHeight;
   if (href === '#v2-home') return 0;
-  if (href === '#v2-contact') return document.documentElement.scrollHeight;
+  if (href === '#v2-contact') return bottom;
   const el = document.querySelector(href);
-  return el ? el.getBoundingClientRect().top + window.scrollY : null;
+  if (!el) return null;
+  return Math.min(el.getBoundingClientRect().top + window.scrollY, bottom);
 }
+
+/**
+ * How long the glide takes, in seconds.
+ *
+ * A fixed duration has to cover both a short hop and the whole page, so it
+ * ends up lurching through the long ones — Contact from the top is nearly
+ * 5000px, which at a flat 1.25s is a blur. Pacing it by distance keeps the
+ * apparent speed roughly constant, with a floor so short hops still read as a
+ * movement and a ceiling so the longest trip never drags.
+ */
+const PACE = 1600; // px per second of travel
+const MIN = 1.1;
+const MAX = 3.4;
+
+const durationFor = (distance: number) => Math.min(MAX, Math.max(MIN, distance / PACE));
+
+/**
+ * Slow at both ends rather than only at the finish.
+ *
+ * Lenis's own default is an expo-out — it leaves at full speed, which is what
+ * made the jump feel thrown rather than travelled.
+ */
+const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 /**
  * Click handler for a v2 in-page link.
@@ -36,8 +61,22 @@ export function onJump(href: string) {
     if (y === null) return;
 
     e.preventDefault();
+
     const lenis = getLenis();
-    if (lenis) lenis.scrollTo(y, { duration: 1.25 });
-    else window.scrollTo({ top: y, behavior: 'smooth' });
+    if (lenis) {
+      // Lenis clamps the target against dimensions it caches, and those can
+      // still be pre-hydration on an early click — the skills section grows by
+      // ~1900px once it pins, and a Contact jump taken before Lenis notices
+      // stopped short of the footer. Recomputing first costs nothing.
+      lenis.resize();
+      lenis.scrollTo(y, {
+        duration: durationFor(Math.abs(y - window.scrollY)),
+        easing: easeInOutCubic,
+      });
+    } else {
+      // Reduced motion turns Lenis off entirely; honour that rather than
+      // hand-rolling an animation it asked us not to play.
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   };
 }

@@ -28,6 +28,11 @@ const CHIP_SPAN = 0.22;
 
 const LARGE = '(min-width: 1024px)';
 
+/** Breathing room kept above and below the pinned diagram, in total. */
+const SHELL = 64;
+/** Never shrink past this — below it the labels stop being readable. */
+const MIN_SCALE = 0.62;
+
 /** True once there's room for the branching diagram. */
 function useLarge() {
   return useSyncExternalStore(
@@ -83,6 +88,44 @@ export default function Skills({ year }: { year: number }) {
   /** The hovered chip, as `[clusterIndex, skill]`. */
   const [hover, setHover] = useState<[number, string] | null>(null);
 
+  /**
+   * Fit the pinned diagram to the viewport.
+   *
+   * At narrower desktops the three columns are tight enough that the side
+   * panels wrap to six rows, and the whole map grows taller than the screen —
+   * which clipped the bottom box off at 1024. Rather than let it overflow, it
+   * scales down just enough to fit and rides up toward the top; when there is
+   * room again the scale returns to 1 and it sits where it was.
+   *
+   * `offsetHeight` is a layout value and ignores the transform, so measuring
+   * the thing we are scaling can't feed back on itself.
+   */
+  const fitRef = useRef<HTMLDivElement>(null);
+  const [fit, setFit] = useState({ scale: 1, height: 0 });
+
+  const applyFit = useCallback(() => {
+    const el = fitRef.current;
+    const natural = el?.offsetHeight ?? 0;
+    if (!natural) return;
+    const room = window.innerHeight - SHELL;
+    const scale = Math.min(1, Math.max(MIN_SCALE, room / natural));
+    setFit({ scale, height: natural * scale });
+  }, []);
+
+  useLayoutEffect(() => {
+    if (!pinned) return;
+    applyFit();
+    const el = fitRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(applyFit);
+    ro.observe(el);
+    window.addEventListener('resize', applyFit, { passive: true });
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', applyFit);
+    };
+  }, [pinned, applyFit]);
+
   // Chips are numbered across the whole board, not per cluster, so the stagger
   // runs as one sequence instead of restarting three times.
   const offsets = skillClusters.map((_, i) =>
@@ -99,43 +142,56 @@ export default function Skills({ year }: { year: number }) {
           }
         >
           <div className="v2-container relative py-16 lg:py-0">
-            <SectionRail index="03" label="Skills" year={year} />
+            {/* Reserves exactly the scaled height, so the sticky screen still
+                centres the diagram rather than centring its unscaled box. */}
+            <div style={pinned && fit.height ? { height: fit.height } : undefined}>
+              <div
+                ref={fitRef}
+                style={
+                  pinned
+                    ? { transform: `scale(${fit.scale})`, transformOrigin: 'top center' }
+                    : undefined
+                }
+              >
+                <SectionRail index="03" label="Skills" year={year} />
 
-            <div
-              ref={diagramRef}
-              onPointerLeave={() => setHover(null)}
-              className="relative mt-10 lg:mt-14"
-            >
-              <Hub progress={progress} hover={hover} />
+                <div
+                  ref={diagramRef}
+                  onPointerLeave={() => setHover(null)}
+                  className="relative mt-10 lg:mt-14"
+                >
+                  <Hub progress={progress} hover={hover} />
 
-              <Routes
-                progress={progress}
-                active={hover?.[0] ?? null}
-                enabled={large}
-                hubRef={diagramRef}
-              />
-
-              <div className="mt-12 grid gap-6 lg:mt-28 lg:grid-cols-3 lg:gap-10">
-                {skillClusters.map((cluster, i) => (
-                  <Panel
-                    key={cluster.id}
-                    cluster={cluster}
-                    clusterIndex={i}
-                    baseIndex={offsets[i]}
-                    total={total}
+                  <Routes
                     progress={progress}
-                    hover={hover}
-                    setHover={setHover}
-                    // frontend left, backend right, tools centred below.
-                    className={
-                      i === 0
-                        ? 'lg:col-start-1 lg:row-start-1'
-                        : i === 1
-                          ? 'lg:col-start-3 lg:row-start-1'
-                          : 'lg:col-start-2 lg:row-start-2'
-                    }
+                    active={hover?.[0] ?? null}
+                    enabled={large}
+                    hubRef={diagramRef}
                   />
-                ))}
+
+                  <div className="mt-12 grid gap-6 lg:mt-20 lg:grid-cols-3 lg:gap-8">
+                    {skillClusters.map((cluster, i) => (
+                      <Panel
+                        key={cluster.id}
+                        cluster={cluster}
+                        clusterIndex={i}
+                        baseIndex={offsets[i]}
+                        total={total}
+                        progress={progress}
+                        hover={hover}
+                        setHover={setHover}
+                        // frontend left, backend right, tools centred below.
+                        className={
+                          i === 0
+                            ? 'lg:col-start-1 lg:row-start-1'
+                            : i === 1
+                              ? 'lg:col-start-3 lg:row-start-1'
+                              : 'lg:col-start-2 lg:row-start-2'
+                        }
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
