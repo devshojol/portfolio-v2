@@ -81,7 +81,7 @@ export default function Works({ year }: { year: number }) {
           </div>
 
           <div className="md:sticky md:top-0 md:flex md:h-screen md:items-center md:justify-end">
-            <SwapButton href="/#projects">View All</SwapButton>
+            <SwapButton href="/v1#projects">View All</SwapButton>
           </div>
         </div>
       </div>

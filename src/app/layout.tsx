@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
-import ScrollProgress from "@/components/ScrollProgress";
 import { profile, siteUrl } from "@/lib/data";
 
 /* Self-hosted variable fonts — no external requests, no layout shift. */
@@ -106,7 +105,6 @@ export default function RootLayout({
       className={`${inter.variable} ${jetbrains.variable} ${bengali.variable}`}
     >
       <body className="noise antialiased">
-        <ScrollProgress />
         <Cursor />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
