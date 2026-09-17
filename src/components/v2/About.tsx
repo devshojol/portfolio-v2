@@ -44,7 +44,7 @@ export default function About({ year }: { year: number }) {
             className="relative min-h-80 overflow-hidden border border-white/10 bg-white/5 md:min-h-105"
           >
             <Image
-              src="/v2/portrait.jpg"
+              src="/v2/portrait.png"
               alt={`${profile.name}, ${profile.role}`}
               fill
               sizes="(max-width: 768px) 100vw, 50vw"

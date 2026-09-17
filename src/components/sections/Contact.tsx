@@ -64,7 +64,7 @@ export default function Contact() {
   };
 
   const field =
-    "w-full rounded-xl border border-line bg-surface/50 px-4 py-3 text-[15px] text-ink outline-none transition-all duration-300 focus:ring-2 focus:ring-accent/15";
+    "w-full rounded-xl border border-line bg-surface/50 px-4 py-3 text-[15px] text-ink outline-hidden transition-all duration-300 focus:ring-2 focus:ring-accent/15";
 
   return (
     <section

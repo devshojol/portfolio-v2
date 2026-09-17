@@ -123,7 +123,7 @@ function WorkCard({
               aria-hidden="true"
               fill
               sizes="(max-width: 768px) 100vw, 720px"
-              className="scale-125 object-cover blur-2xl"
+              className="scale-100 object-cover blur-md"
             />
             <span className="absolute inset-0 bg-black/25" />
 

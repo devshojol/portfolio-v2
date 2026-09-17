@@ -461,7 +461,7 @@ function Chip({
         onBlur={() => setHover(null)}
         animate={{ opacity: dimmed ? 0.28 : 1, y: lifted ? -3 : 0 }}
         transition={{ duration: 0.25, ease: 'easeOut' }}
-        className="v2-label group relative block cursor-default overflow-hidden border border-white/15 px-3 py-2 text-white/70 transition-colors duration-300 hover:border-(--v2-accent) hover:text-black focus-visible:border-(--v2-accent) focus-visible:text-black focus-visible:outline-none"
+        className="v2-label group relative block cursor-default overflow-hidden border border-white/15 px-3 py-2 text-white/70 transition-colors duration-300 hover:border-(--v2-accent) hover:text-black focus-visible:border-(--v2-accent) focus-visible:text-black focus-visible:outline-hidden"
       >
         {/* Accent sweeps up behind the label, as on the buttons. */}
         <span className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-(--v2-accent) transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100" />

@@ -57,7 +57,7 @@ export default function AvComms() {
   };
 
   const field =
-    'w-full border border-white/12 bg-[#04070a]/70 px-3.5 py-2.5 text-[14px] text-(--paper) outline-none transition-colors duration-300 placeholder:text-(--paper-dim)/60 focus:border-(--gamma)/70';
+    'w-full border border-white/12 bg-[#04070a]/70 px-3.5 py-2.5 text-[14px] text-(--paper) outline-hidden transition-colors duration-300 placeholder:text-(--paper-dim)/60 focus:border-(--gamma)/70';
 
   return (
     <SectionShell

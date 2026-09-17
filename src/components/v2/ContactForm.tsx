@@ -62,7 +62,7 @@ export default function ContactForm() {
   };
 
   const field =
-    'w-full border-b border-black/30 bg-transparent py-2 text-sm text-black outline-none transition-colors placeholder:text-black/45 focus:border-black';
+    'w-full border-b border-black/30 bg-transparent py-2 text-sm text-black outline-hidden transition-colors placeholder:text-black/45 focus:border-black';
 
   return (
     <form onSubmit={submit} className="flex flex-col gap-4">
