@@ -10,7 +10,7 @@ export default function SectionRail({
 }) {
   return (
     <div className="v2-label flex items-center justify-between border-b border-white/10 pb-4 text-white/45">
-      <span className="text-[var(--v2-accent)]">({index})</span>
+      <span className="text-(--v2-accent)">({index})</span>
       <span>({label})</span>
       <span>&copy; {year}</span>
     </div>

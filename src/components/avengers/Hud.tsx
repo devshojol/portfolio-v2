@@ -101,12 +101,12 @@ export default function Hud({
           className="group pointer-events-auto inline-flex items-center gap-2.5"
           title="Back to the main portfolio"
         >
-          <span className="av-blip block h-1.5 w-1.5 rotate-45 bg-[var(--gamma)]" />
-          <span className="av-mono text-[11px] tracking-[0.26em] text-[var(--paper)] uppercase transition-colors group-hover:text-[var(--gamma)]">
+          <span className="av-blip block h-1.5 w-1.5 rotate-45 bg-(--gamma)" />
+          <span className="av-mono text-[11px] tracking-[0.26em] text-(--paper) uppercase transition-colors group-hover:text-(--gamma)">
             Shojol Islam
           </span>
         </Link>
-        <div className="av-mono mt-1.5 pl-4 text-[9px] tracking-[0.3em] text-[var(--paper-dim)] uppercase">
+        <div className="av-mono mt-1.5 pl-4 text-[9px] tracking-[0.3em] text-(--paper-dim) uppercase">
           Frontend developer
         </div>
       </div>
@@ -116,7 +116,7 @@ export default function Hud({
         className={`absolute top-5 right-5 text-right transition-opacity duration-500 sm:top-7 sm:right-8 ${chrome}`}
       >
         <div className="av-label">File {current.file}</div>
-        <div className="av-mono mt-1 text-[11px] tracking-[0.2em] text-[var(--paper)] uppercase">
+        <div className="av-mono mt-1 text-[11px] tracking-[0.2em] text-(--paper) uppercase">
           {current.label}
         </div>
       </div>
@@ -162,7 +162,7 @@ export default function Hud({
               onClick={onToggleCinema}
               aria-pressed={cinema}
               disabled={!visible}
-              className="av-mono pointer-events-auto inline-flex items-center gap-2 border border-[var(--gamma)]/60 bg-[#04070a]/70 px-3 py-1.5 text-[10px] tracking-[0.2em] text-[var(--gamma-soft)] uppercase backdrop-blur-[3px] transition-all duration-300 hover:bg-[var(--gamma)] hover:text-[#04070a]"
+              className="av-mono pointer-events-auto inline-flex items-center gap-2 border border-(--gamma)/60 bg-[#04070a]/70 px-3 py-1.5 text-[10px] tracking-[0.2em] text-(--gamma-soft) uppercase backdrop-blur-[3px] transition-all duration-300 hover:bg-(--gamma) hover:text-[#04070a]"
             >
               <span aria-hidden>{cinema ? '■' : '▶'}</span>
               {cinema ? 'Stop · Esc' : 'Play with sound'}
@@ -172,19 +172,19 @@ export default function Hud({
               <button
                 type="button"
                 onClick={onEnableSound}
-                className="av-mono pointer-events-auto inline-flex items-center gap-2 border border-white/25 bg-[#04070a]/70 px-3 py-1.5 text-[10px] tracking-[0.2em] text-[var(--paper)] uppercase backdrop-blur-[3px] transition-all duration-300 hover:border-[var(--gamma)]/70 hover:text-[var(--gamma-soft)]"
+                className="av-mono pointer-events-auto inline-flex items-center gap-2 border border-white/25 bg-[#04070a]/70 px-3 py-1.5 text-[10px] tracking-[0.2em] text-(--paper) uppercase backdrop-blur-[3px] transition-all duration-300 hover:border-(--gamma)/70 hover:text-(--gamma-soft)"
               >
                 <span aria-hidden>🔊</span>
                 Sound
               </button>
             )}
 
-            <span className="av-mono hidden text-[10px] tracking-[0.26em] text-[var(--paper-dim)] uppercase sm:inline">
-              <span className="text-[var(--gamma)]">REC</span> {timecode(progress)} / 01:05
+            <span className="av-mono hidden text-[10px] tracking-[0.26em] text-(--paper-dim) uppercase sm:inline">
+              <span className="text-(--gamma)">REC</span> {timecode(progress)} / 01:05
             </span>
           </div>
 
-          <div className="av-mono text-right text-[10px] tracking-[0.26em] text-[var(--paper-dim)] uppercase">
+          <div className="av-mono text-right text-[10px] tracking-[0.26em] text-(--paper-dim) uppercase">
             {cinema
               ? soundBlocked
                 ? 'Playing · silent'
@@ -196,7 +196,7 @@ export default function Hud({
         <div className="h-[2px] w-full bg-white/10">
           <div
             ref={barRef}
-            className="h-full w-full origin-left bg-[var(--gamma)]"
+            className="h-full w-full origin-left bg-(--gamma)"
             style={{ transform: 'scaleX(0)', boxShadow: '0 0 12px rgba(163,255,60,0.65)' }}
           />
         </div>

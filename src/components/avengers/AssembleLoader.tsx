@@ -126,33 +126,33 @@ export default function AssembleLoader({
       <div ref={hudRef} className="absolute inset-0 flex flex-col justify-between p-6 sm:p-10">
         <div className="flex items-start justify-between">
           <div className="av-label flex items-center gap-2 whitespace-nowrap">
-            <span className="block h-1.5 w-1.5 rotate-45 bg-[var(--gamma)]" />
+            <span className="block h-1.5 w-1.5 rotate-45 bg-(--gamma)" />
             Avengers protocol
           </div>
-          <div className="av-mono text-right text-[10px] tracking-[0.3em] whitespace-nowrap text-[var(--paper-dim)] uppercase">
+          <div className="av-mono text-right text-[10px] tracking-[0.3em] whitespace-nowrap text-(--paper-dim) uppercase">
             Shojol Islam
             {/* the second line has nowhere to go on a phone */}
-            <span className="hidden text-[var(--gamma)] sm:block">Portfolio // 2012 New York</span>
+            <span className="hidden text-(--gamma) sm:block">Portfolio // 2012 New York</span>
           </div>
         </div>
 
         <div className="mx-auto w-full max-w-xl">
           <div className="flex items-end justify-between">
             <span className="av-label">{status}</span>
-            <span className="av-mono text-2xl font-semibold text-[var(--paper)] tabular-nums sm:text-3xl">
+            <span className="av-mono text-2xl font-semibold text-(--paper) tabular-nums sm:text-3xl">
               {String(percent).padStart(3, '0')}
-              <span className="text-[var(--gamma)]">%</span>
+              <span className="text-(--gamma)">%</span>
             </span>
           </div>
 
           <div className="relative mt-3 h-[3px] w-full overflow-hidden bg-white/15">
             <div
-              className="absolute inset-y-0 left-0 bg-[var(--gamma)] transition-[width] duration-200 ease-out"
+              className="absolute inset-y-0 left-0 bg-(--gamma) transition-[width] duration-200 ease-out"
               style={{ width: `${percent}%`, boxShadow: '0 0 14px 2px rgba(163,255,60,0.6)' }}
             />
           </div>
 
-          <div className="av-mono mt-3 flex justify-between gap-4 text-[10px] tracking-[0.22em] text-[var(--paper-dim)] uppercase">
+          <div className="av-mono mt-3 flex justify-between gap-4 text-[10px] tracking-[0.22em] text-(--paper-dim) uppercase">
             <span>Decrypting 47.6 MB of footage</span>
             <span>{phase === 'playing' ? 'Stand by' : ready ? 'Ready' : 'Holding'}</span>
           </div>

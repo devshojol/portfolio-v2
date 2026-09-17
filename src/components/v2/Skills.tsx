@@ -1,89 +1,143 @@
 'use client';
 
-import { useRef, useState } from 'react';
-import { AnimatePresence, motion, type Variants } from 'framer-motion';
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
+import { AnimatePresence, animate, motion, useMotionValue, useTransform } from 'framer-motion';
+import type { MotionValue } from 'framer-motion';
+import { usePrefersReducedMotion } from '@/lib/media';
 import SectionRail from './SectionRail';
 import { useArrived } from './Reveal';
+import { clamp01, onFrame } from './scrollDriver';
 import { skillClusters, type SkillCluster } from './data';
 
+/* ── Timing, as fractions of the section's scroll ──────── */
+
+/** The three routes draw over the opening of the scroll. */
+const DRAW_END = 0.24;
+/** Then the chips come in, one after another, over the rest. */
+const CHIPS_FROM = 0.28;
+const CHIPS_TO = 0.96;
+/** How much of that window a single chip takes; the rest is its stagger. */
+const CHIP_SPAN = 0.22;
+
+const LARGE = '(min-width: 1024px)';
+
+/** True once there's room for the branching diagram. */
+function useLarge() {
+  return useSyncExternalStore(
+    (onChange) => {
+      const mq = window.matchMedia(LARGE);
+      mq.addEventListener('change', onChange);
+      return () => mq.removeEventListener('change', onChange);
+    },
+    () => window.matchMedia(LARGE).matches,
+    () => false
+  );
+}
+
 /**
- * Full-height skills map: a hub with three limbs branching down to the
- * clusters, drawn on arrival rather than just faded in.
+ * Skills as a branching map.
  *
- * The tree only makes sense with room to spread, so the connectors are a
- * `md`-and-up affair; below that the clusters stack as plain labelled lists,
- * which is how the same information reads on a phone.
- *
- * Hovering a chip spotlights it — the rest of the board dims and its own limb
- * lights up — and the hub swaps to a readout naming the skill and its branch.
+ * On large screens the section pins and the scroll itself becomes the
+ * timeline: the three routes draw out of the hub, then every chip fades up in
+ * turn as you keep scrolling. Below `lg` there is no room to branch and
+ * pinning a tall section on a phone is miserable, so it falls back to normal
+ * flow with the same sequence played once on arrival.
  */
 export default function Skills({ year }: { year: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const state = useArrived(ref, 120);
-  const on = state !== 'hidden';
+  const large = useLarge();
+  const reduced = usePrefersReducedMotion();
+  const pinned = large && !reduced;
 
-  /** The hovered chip, as `[clusterId, skill]`. */
-  const [hover, setHover] = useState<[string, string] | null>(null);
-  const activeCluster = hover?.[0] ?? null;
+  const trackRef = useRef<HTMLDivElement>(null);
+  const diagramRef = useRef<HTMLDivElement>(null);
+  const arrival = useArrived(diagramRef, 120);
+
+  /** 0 → 1 across the section. Drives everything; never re-renders React. */
+  const progress = useMotionValue(0);
+
+  useEffect(() => {
+    if (!pinned) {
+      // Nothing to scrub against — play the same sequence once on arrival.
+      const controls = animate(progress, arrival === 'hidden' ? 0 : 1, {
+        duration: 1.8,
+        ease: 'easeOut',
+      });
+      return () => controls.stop();
+    }
+    return onFrame(() => {
+      const el = trackRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const travel = rect.height - window.innerHeight;
+      progress.set(travel > 0 ? clamp01(-rect.top / travel) : 1);
+    });
+  }, [pinned, arrival, progress]);
+
+  /** The hovered chip, as `[clusterIndex, skill]`. */
+  const [hover, setHover] = useState<[number, string] | null>(null);
+
+  // Chips are numbered across the whole board, not per cluster, so the stagger
+  // runs as one sequence instead of restarting three times.
+  const offsets = skillClusters.map((_, i) =>
+    skillClusters.slice(0, i).reduce((n, c) => n + c.items.length, 0)
+  );
+  const total = skillClusters.reduce((n, c) => n + c.items.length, 0);
 
   return (
     <section id="v2-skills" className="relative z-10 bg-(--v2-paper)">
-      <div className="v2-container relative z-10 pt-16 pb-28 md:pt-24 md:pb-40">
-        <SectionRail index="03" label="Skills" year={year} />
-
+      <div ref={trackRef} className={pinned ? 'relative h-[300vh]' : 'relative'}>
         <div
-          ref={ref}
-          onPointerLeave={() => setHover(null)}
-          className="relative flex flex-col items-center md:min-h-[78vh] md:justify-center"
+          className={
+            pinned ? 'sticky top-0 flex h-screen flex-col justify-center' : 'flex flex-col'
+          }
         >
-          <Hub on={on} hover={hover} />
+          <div className="v2-container relative py-16 lg:py-0">
+            <SectionRail index="03" label="Skills" year={year} />
 
-          <Branches on={on} active={activeCluster} />
+            <div
+              ref={diagramRef}
+              onPointerLeave={() => setHover(null)}
+              className="relative mt-10 lg:mt-14"
+            >
+              <Hub progress={progress} hover={hover} />
 
-          {/* Trunk continues past the two upper clusters to the third. */}
-          <div className="relative w-full">
-            <Limb
-              on={on}
-              active={activeCluster === 'craft'}
-              className="absolute top-0 bottom-0 left-1/2 hidden w-px -translate-x-1/2 md:block"
-              axis="y"
-              delay={0.25}
-            />
-
-            <div className="grid gap-10 md:grid-cols-2 md:gap-24">
-              <Cluster
-                cluster={skillClusters[0]}
-                on={on}
-                hover={hover}
-                setHover={setHover}
-                baseDelay={0.5}
+              <Routes
+                progress={progress}
+                active={hover?.[0] ?? null}
+                enabled={large}
+                hubRef={diagramRef}
               />
-              <Cluster
-                cluster={skillClusters[1]}
-                on={on}
-                hover={hover}
-                setHover={setHover}
-                baseDelay={0.62}
-              />
+
+              <div className="mt-12 grid gap-6 lg:mt-28 lg:grid-cols-3 lg:gap-10">
+                {skillClusters.map((cluster, i) => (
+                  <Panel
+                    key={cluster.id}
+                    cluster={cluster}
+                    clusterIndex={i}
+                    baseIndex={offsets[i]}
+                    total={total}
+                    progress={progress}
+                    hover={hover}
+                    setHover={setHover}
+                    // frontend left, backend right, tools centred below.
+                    className={
+                      i === 0
+                        ? 'lg:col-start-1 lg:row-start-1'
+                        : i === 1
+                          ? 'lg:col-start-3 lg:row-start-1'
+                          : 'lg:col-start-2 lg:row-start-2'
+                    }
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-
-          <Limb
-            on={on}
-            active={activeCluster === 'craft'}
-            className="hidden h-14 w-px md:block"
-            axis="y"
-            delay={0.3}
-          />
-
-          <div className="mt-10 w-full md:mt-0">
-            <Cluster
-              cluster={skillClusters[2]}
-              on={on}
-              hover={hover}
-              setHover={setHover}
-              baseDelay={0.74}
-            />
           </div>
         </div>
       </div>
@@ -93,11 +147,19 @@ export default function Skills({ year }: { year: number }) {
 
 /* ── Hub ───────────────────────────────────────────────── */
 
-function Hub({ on, hover }: { on: boolean; hover: [string, string] | null }) {
-  const label = hover ? skillClusters.find((c) => c.id === hover[0])?.label : 'Hover to inspect';
+function Hub({
+  progress,
+  hover,
+}: {
+  progress: MotionValue<number>;
+  hover: [number, string] | null;
+}) {
+  const opacity = useTransform(progress, [0, 0.06], [0, 1]);
+  const y = useTransform(progress, [0, 0.06], [16, 0]);
+  const label = hover ? skillClusters[hover[0]].label : 'Hover to inspect';
 
   return (
-    <div className="relative mb-10 md:mb-0">
+    <motion.div style={{ opacity, y }} className="relative mx-auto w-fit">
       {/* Slow breathing glow, so the hub never sits completely still. */}
       <motion.span
         aria-hidden="true"
@@ -105,16 +167,12 @@ function Hub({ on, hover }: { on: boolean; hover: [string, string] | null }) {
         animate={{ opacity: [0.07, 0.16, 0.07], scale: [1, 1.1, 1] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
       />
-
-      <motion.div
-        initial={false}
-        animate={on ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: 18, scale: 0.96 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="border border-(--v2-accent)/40 bg-black/40 px-8 py-5 text-center backdrop-blur-sm md:px-12 md:py-6"
+      <div
+        data-hub
+        className="border border-(--v2-accent)/40 bg-black/40 px-10 py-5 text-center backdrop-blur-sm"
       >
         <h2 className="v2-display text-xl md:text-3xl">My Skills</h2>
-
-        {/* Readout swaps in place; the box is fixed-height so nothing jumps. */}
+        {/* Fixed-height slot so a swapping readout can't shift the diagram. */}
         <div className="mt-2 flex h-4 items-center justify-center overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.p
@@ -136,142 +194,223 @@ function Hub({ on, hover }: { on: boolean; hover: [string, string] | null }) {
             </motion.p>
           </AnimatePresence>
         </div>
-      </motion.div>
-    </div>
+      </div>
+    </motion.div>
   );
 }
 
-/* ── Connectors ────────────────────────────────────────── */
+/* ── Connector routes ──────────────────────────────────── */
+
+type Route = { d: string; id: string };
 
 /**
- * One rule of the tree. Scales from nothing along its own axis so the diagram
- * draws itself rather than fading in as a finished picture.
+ * One stroked path per branch, measured off the real boxes rather than laid
+ * out in percentages — that way each arrow lands on its panel at any width,
+ * and hovering a cluster can light its own route and nothing else.
  */
-function Limb({
-  on,
+function Routes({
+  progress,
   active,
-  axis,
-  delay,
-  className,
+  enabled,
+  hubRef,
 }: {
-  on: boolean;
-  active: boolean;
-  axis: 'x' | 'y';
-  delay: number;
-  className: string;
+  progress: MotionValue<number>;
+  active: number | null;
+  enabled: boolean;
+  hubRef: React.RefObject<HTMLDivElement | null>;
 }) {
+  const [box, setBox] = useState({ w: 0, h: 0 });
+  const [routes, setRoutes] = useState<Route[]>([]);
+
+  const measure = useCallback(() => {
+    const root = hubRef.current;
+    if (!root) return;
+    const hub = root.querySelector('[data-hub]');
+    const panels = [...root.querySelectorAll('[data-panel]')];
+    if (!hub || panels.length < 3) return;
+
+    const base = root.getBoundingClientRect();
+    const rel = (r: DOMRect) => ({ x: r.left - base.left, y: r.top - base.top });
+
+    const h = hub.getBoundingClientRect();
+    const from = { x: rel(h).x + h.width / 2, y: rel(h).y + h.height };
+
+    const tops = panels.map((p) => {
+      const r = p.getBoundingClientRect();
+      return { x: rel(r).x + r.width / 2, y: rel(r).y };
+    });
+
+    // The crossbar sits partway down the gap between hub and the side panels.
+    const rail = from.y + (Math.min(tops[0].y, tops[1].y) - from.y) * 0.45;
+    // Arrowhead, drawn as part of the same stroke so it inherits the colour.
+    const head = (x: number, y: number) => ` M ${x - 7} ${y - 10} L ${x} ${y} L ${x + 7} ${y - 10}`;
+
+    setBox({ w: base.width, h: base.height });
+    setRoutes([
+      {
+        id: 'frontend',
+        d: `M ${from.x} ${from.y} L ${from.x} ${rail} L ${tops[0].x} ${rail} L ${tops[0].x} ${tops[0].y}${head(tops[0].x, tops[0].y)}`,
+      },
+      {
+        id: 'backend',
+        d: `M ${from.x} ${from.y} L ${from.x} ${rail} L ${tops[1].x} ${rail} L ${tops[1].x} ${tops[1].y}${head(tops[1].x, tops[1].y)}`,
+      },
+      {
+        id: 'tools',
+        d: `M ${from.x} ${from.y} L ${tops[2].x} ${tops[2].y}${head(tops[2].x, tops[2].y)}`,
+      },
+    ]);
+  }, [hubRef]);
+
+  useLayoutEffect(() => {
+    // Below `lg` the diagram isn't rendered at all, so there is nothing to
+    // measure and no state to clear — the early return below handles it.
+    if (!enabled) return;
+    measure();
+    const root = hubRef.current;
+    if (!root) return;
+    const ro = new ResizeObserver(measure);
+    ro.observe(root);
+    // Web fonts land after first paint and change the boxes under us.
+    document.fonts?.ready.then(measure).catch(() => {});
+    return () => ro.disconnect();
+  }, [enabled, measure, hubRef]);
+
+  if (!enabled || routes.length === 0) return null;
+
   return (
-    <motion.span
+    <svg
       aria-hidden="true"
-      className={`origin-top ${className}`}
-      style={{ transformOrigin: axis === 'y' ? 'top' : 'center' }}
-      initial={false}
-      animate={{
-        [axis === 'y' ? 'scaleY' : 'scaleX']: on ? 1 : 0,
-        backgroundColor: active ? 'var(--v2-accent)' : 'rgba(255,255,255,0.14)',
-      }}
-      transition={{
-        default: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] },
-        backgroundColor: { duration: 0.25 },
-      }}
-    />
+      className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+      viewBox={`0 0 ${box.w} ${box.h}`}
+      fill="none"
+    >
+      {routes.map((route, i) => (
+        <RoutePath key={route.id} d={route.d} progress={progress} active={active === i} order={i} />
+      ))}
+    </svg>
   );
 }
 
-function Branches({ on, active }: { on: boolean; active: string | null }) {
+function RoutePath({
+  d,
+  progress,
+  active,
+  order,
+}: {
+  d: string;
+  progress: MotionValue<number>;
+  active: boolean;
+  order: number;
+}) {
+  // Routes start together but finish apart, so the map unfolds rather than
+  // snapping into place all at once.
+  const from = order * 0.03;
+  const pathLength = useTransform(progress, [from, DRAW_END + from], [0, 1]);
+
   return (
-    <div aria-hidden="true" className="relative hidden h-28 w-full md:block">
-      <Limb
-        on={on}
-        active={active !== null}
-        axis="y"
-        delay={0.05}
-        className="absolute top-0 left-1/2 h-12 w-px -translate-x-1/2"
-      />
-      <Limb
-        on={on}
-        active={active === 'frontend' || active === 'backend'}
-        axis="x"
-        delay={0.18}
-        className="absolute top-12 right-1/4 left-1/4 h-px"
-      />
-      <Limb
-        on={on}
-        active={active === 'frontend'}
-        axis="y"
-        delay={0.32}
-        className="absolute top-12 left-1/4 h-16 w-px"
-      />
-      <Limb
-        on={on}
-        active={active === 'backend'}
-        axis="y"
-        delay={0.32}
-        className="absolute top-12 right-1/4 h-16 w-px"
-      />
-    </div>
+    <motion.path
+      d={d}
+      style={{ pathLength }}
+      strokeWidth={1}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      animate={{ stroke: active ? 'var(--v2-accent)' : 'rgba(255,255,255,0.18)' }}
+      transition={{ duration: 0.25 }}
+    />
   );
 }
 
 /* ── Clusters ──────────────────────────────────────────── */
 
-const listVariants: Variants = {
-  hidden: {},
-  show: (base: number) => ({ transition: { staggerChildren: 0.035, delayChildren: base } }),
-};
-
-const chipVariants: Variants = {
-  hidden: { opacity: 0, y: 14, scale: 0.94 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.42, ease: [0.16, 1, 0.3, 1] } },
-};
-
-function Cluster({
+function Panel({
   cluster,
-  on,
+  clusterIndex,
+  baseIndex,
+  total,
+  progress,
   hover,
   setHover,
-  baseDelay,
+  className,
 }: {
   cluster: SkillCluster;
-  on: boolean;
-  hover: [string, string] | null;
-  setHover: (v: [string, string] | null) => void;
-  baseDelay: number;
+  clusterIndex: number;
+  baseIndex: number;
+  total: number;
+  progress: MotionValue<number>;
+  hover: [number, string] | null;
+  setHover: (v: [number, string] | null) => void;
+  className: string;
 }) {
-  return (
-    <div className="relative">
-      <p className="v2-label mb-4 text-white/35">({cluster.label})</p>
+  const active = hover?.[0] === clusterIndex;
 
-      <motion.ul
-        variants={listVariants}
-        custom={baseDelay}
-        initial={false}
-        animate={on ? 'show' : 'hidden'}
-        className="flex flex-wrap gap-2"
+  return (
+    <motion.div
+      data-panel
+      animate={{ borderColor: active ? 'var(--v2-accent)' : 'rgba(255,255,255,0.12)' }}
+      transition={{ duration: 0.25 }}
+      className={`border p-5 lg:p-6 ${className}`}
+    >
+      <p className="v2-label mb-4 text-white/35">({cluster.label})</p>
+      <ul className="flex flex-wrap gap-2">
+        {cluster.items.map((skill, i) => (
+          <Chip
+            key={skill}
+            skill={skill}
+            clusterIndex={clusterIndex}
+            step={(baseIndex + i) / Math.max(1, total - 1)}
+            progress={progress}
+            dimmed={hover !== null && hover[1] !== skill}
+            lifted={hover?.[1] === skill}
+            setHover={setHover}
+          />
+        ))}
+      </ul>
+    </motion.div>
+  );
+}
+
+function Chip({
+  skill,
+  clusterIndex,
+  step,
+  progress,
+  dimmed,
+  lifted,
+  setHover,
+}: {
+  skill: string;
+  clusterIndex: number;
+  step: number;
+  progress: MotionValue<number>;
+  dimmed: boolean;
+  lifted: boolean;
+  setHover: (v: [number, string] | null) => void;
+}) {
+  // Each chip owns a slice of the chip window, offset by its place in the run.
+  const start = CHIPS_FROM + step * (CHIPS_TO - CHIPS_FROM - CHIP_SPAN);
+  const opacity = useTransform(progress, [start, start + CHIP_SPAN], [0, 1]);
+  const y = useTransform(progress, [start, start + CHIP_SPAN], [14, 0]);
+  const scale = useTransform(progress, [start, start + CHIP_SPAN], [0.92, 1]);
+
+  return (
+    // Reveal rides the outer element and the spotlight the inner one, so the
+    // two opacities multiply instead of fighting over the same property.
+    <motion.li style={{ opacity, y, scale }}>
+      <motion.button
+        type="button"
+        onHoverStart={() => setHover([clusterIndex, skill])}
+        onHoverEnd={() => setHover(null)}
+        onFocus={() => setHover([clusterIndex, skill])}
+        onBlur={() => setHover(null)}
+        animate={{ opacity: dimmed ? 0.28 : 1, y: lifted ? -3 : 0 }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+        className="v2-label group relative block cursor-default overflow-hidden border border-white/15 px-3 py-2 text-white/70 transition-colors duration-300 hover:border-(--v2-accent) hover:text-black focus-visible:border-(--v2-accent) focus-visible:text-black focus-visible:outline-none"
       >
-        {cluster.items.map((skill) => {
-          // Spotlight: anything that isn't the hovered chip steps back.
-          const dimmed = hover !== null && hover[1] !== skill;
-          return (
-            <motion.li key={skill} variants={chipVariants}>
-              <motion.button
-                type="button"
-                onHoverStart={() => setHover([cluster.id, skill])}
-                onHoverEnd={() => setHover(null)}
-                onFocus={() => setHover([cluster.id, skill])}
-                onBlur={() => setHover(null)}
-                animate={{ opacity: dimmed ? 0.28 : 1, y: hover?.[1] === skill ? -3 : 0 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="v2-label group relative block cursor-default overflow-hidden border border-white/15 px-3 py-2 text-white/70 transition-colors duration-300 hover:border-(--v2-accent) hover:text-black focus-visible:border-(--v2-accent) focus-visible:text-black focus-visible:outline-none"
-              >
-                {/* Accent sweeps up behind the label, as on the buttons. */}
-                <span className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-(--v2-accent) transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100" />
-                <span className="relative z-10">{skill}</span>
-              </motion.button>
-            </motion.li>
-          );
-        })}
-      </motion.ul>
-    </div>
+        {/* Accent sweeps up behind the label, as on the buttons. */}
+        <span className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-(--v2-accent) transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100" />
+        <span className="relative z-10">{skill}</span>
+      </motion.button>
+    </motion.li>
   );
 }

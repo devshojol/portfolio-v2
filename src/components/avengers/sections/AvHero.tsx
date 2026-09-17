@@ -93,45 +93,45 @@ export default function AvHero({ started }: { started: boolean }) {
         <div data-hero-panel className="container-x w-full">
           <div className="max-w-3xl" data-hero-lede-wrap>
             <div data-hero-kicker className="av-label flex items-center gap-3">
-              <span className="av-blip block h-1.5 w-1.5 rotate-45 bg-[var(--gamma)]" />
+              <span className="av-blip block h-1.5 w-1.5 rotate-45 bg-(--gamma)" />
               File 00 — Assemble
             </div>
 
             <div
               data-hero-rule
-              className="mt-4 h-px w-28 origin-left bg-linear-to-r from-[var(--gamma)] to-transparent"
+              className="mt-4 h-px w-28 origin-left bg-linear-to-r from-(--gamma) to-transparent"
             />
 
             <h1
               data-hero-title
-              className="av-title av-glow mt-5 text-[clamp(2.5rem,11vw,8.5rem)] text-[var(--paper)] sm:mt-6"
+              className="av-title av-glow mt-5 text-[clamp(2.5rem,11vw,8.5rem)] text-(--paper) sm:mt-6"
             >
               Shojol Islam
             </h1>
 
             <p
               data-hero-lede
-              className="av-mono mt-6 max-w-xl text-[13px] leading-relaxed tracking-[0.16em] text-[var(--paper-dim)] uppercase sm:text-[14px]"
+              className="av-mono mt-6 max-w-xl text-[13px] leading-relaxed tracking-[0.16em] text-(--paper-dim) uppercase sm:text-[14px]"
             >
               {profile.role} · {profile.location}
-              <span className="mt-2 block text-[var(--gamma-soft)]">{profile.tagline}</span>
+              <span className="mt-2 block text-(--gamma-soft)">{profile.tagline}</span>
             </p>
           </div>
 
           {/* revealed on scroll */}
           <div data-hero-more className="mt-6 max-w-3xl space-y-5 sm:mt-8 sm:space-y-6">
-            <p className="hidden max-w-xl text-[15px] leading-relaxed text-[var(--paper)]/85 sm:block sm:text-base">
+            <p className="hidden max-w-xl text-[15px] leading-relaxed text-(--paper)/85 sm:block sm:text-base">
               {profile.summary}
             </p>
 
-            <div className="grid max-w-xl grid-cols-2 gap-px bg-[var(--gamma)]/15 sm:grid-cols-4">
+            <div className="grid max-w-xl grid-cols-2 gap-px bg-(--gamma)/15 sm:grid-cols-4">
               {stats.map((s) => (
                 <div key={s.label} className="bg-[#04070a]/70 px-4 py-3.5 backdrop-blur-[2px]">
-                  <div className="av-mono text-2xl font-semibold text-[var(--gamma)]">
+                  <div className="av-mono text-2xl font-semibold text-(--gamma)">
                     {s.value}
                     {s.suffix}
                   </div>
-                  <div className="av-mono mt-1 text-[9px] leading-tight tracking-[0.2em] text-[var(--paper-dim)] uppercase">
+                  <div className="av-mono mt-1 text-[9px] leading-tight tracking-[0.2em] text-(--paper-dim) uppercase">
                     {s.label}
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function AvHero({ started }: { started: boolean }) {
             <div className="flex flex-wrap items-center gap-3">
               <a
                 href="#comms"
-                className="av-mono border border-[var(--gamma)]/70 bg-[var(--gamma)]/12 px-5 py-2.5 text-[11px] tracking-[0.24em] text-[var(--gamma-soft)] uppercase transition-all duration-300 hover:bg-[var(--gamma)] hover:text-[#04070a]"
+                className="av-mono border border-(--gamma)/70 bg-(--gamma)/12 px-5 py-2.5 text-[11px] tracking-[0.24em] text-(--gamma-soft) uppercase transition-all duration-300 hover:bg-(--gamma) hover:text-[#04070a]"
               >
                 Open comms
               </a>
@@ -149,12 +149,12 @@ export default function AvHero({ started }: { started: boolean }) {
                 href={profile.resumeUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="av-mono border border-white/20 px-5 py-2.5 text-[11px] tracking-[0.24em] text-[var(--paper)] uppercase transition-all duration-300 hover:border-[var(--gamma)]/60 hover:text-[var(--gamma-soft)]"
+                className="av-mono border border-white/20 px-5 py-2.5 text-[11px] tracking-[0.24em] text-(--paper) uppercase transition-all duration-300 hover:border-(--gamma)/60 hover:text-(--gamma-soft)"
               >
                 Résumé
               </a>
-              <span className="av-mono flex items-center gap-2 text-[10px] tracking-[0.2em] text-[var(--paper-dim)] uppercase">
-                <span className="av-blip block h-1.5 w-1.5 rounded-full bg-[var(--gamma)]" />
+              <span className="av-mono flex items-center gap-2 text-[10px] tracking-[0.2em] text-(--paper-dim) uppercase">
+                <span className="av-blip block h-1.5 w-1.5 rounded-full bg-(--gamma)" />
                 {profile.availability}
               </span>
             </div>
@@ -163,7 +163,7 @@ export default function AvHero({ started }: { started: boolean }) {
 
         <div
           data-hero-hint
-          className="av-mono absolute bottom-12 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.32em] text-[var(--paper-dim)] uppercase"
+          className="av-mono absolute bottom-12 left-1/2 -translate-x-1/2 text-[10px] tracking-[0.32em] text-(--paper-dim) uppercase"
         >
           Scroll to advance the footage — or press play for the cut with sound
         </div>

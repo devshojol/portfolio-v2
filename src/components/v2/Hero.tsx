@@ -21,7 +21,7 @@ export default function Hero() {
     <section
       id="v2-home"
       onClick={shift}
-      className="sticky top-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-[var(--v2-accent)] text-black select-none"
+      className="sticky top-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-(--v2-accent) text-black select-none"
     >
       {/* Darkens everything in the hero, nav included, as the panel covers it. */}
       <HeroDim />

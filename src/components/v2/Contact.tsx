@@ -19,7 +19,7 @@ export default function Contact() {
   return (
     <section
       id="v2-contact"
-      className="sticky bottom-0 z-0 flex h-svh flex-col justify-between overflow-hidden bg-[var(--v2-accent)] text-black"
+      className="sticky bottom-0 z-0 flex h-svh flex-col justify-between overflow-hidden bg-(--v2-accent) text-black"
     >
       {/* Two identical halves so the -50% loop is seamless. The clip sits on
           an inner box with no padding of its own, so the strip runs out at the

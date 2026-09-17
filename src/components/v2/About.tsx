@@ -41,7 +41,7 @@ export default function About({ year }: { year: number }) {
           <Reveal
             y={24}
             offset={80}
-            className="relative min-h-[320px] overflow-hidden border border-white/10 bg-white/5 md:min-h-[420px]"
+            className="relative min-h-80 overflow-hidden border border-white/10 bg-white/5 md:min-h-105"
           >
             <Image
               src="/v2/portrait.jpg"
@@ -52,7 +52,7 @@ export default function About({ year }: { year: number }) {
             />
           </Reveal>
 
-          <Panel label="Short description" delay={0.08}>
+          <Panel label="Career Snapshot" delay={0.08}>
             <WordFade text={bio} className="text-base leading-relaxed text-white" />
 
             <p className="v2-label mt-8 text-white/40">(Keywords)</p>

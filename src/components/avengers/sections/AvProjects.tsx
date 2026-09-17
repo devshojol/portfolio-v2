@@ -72,23 +72,23 @@ function Deck() {
           >
             <div className="max-w-2xl">
               <div className="flex items-center gap-3">
-                <span className="av-mono text-[11px] tracking-[0.24em] text-[var(--gamma)]">
+                <span className="av-mono text-[11px] tracking-[0.24em] text-(--gamma)">
                   0{i + 1}
                 </span>
-                <span className="h-px w-10 bg-[var(--gamma)]/40" />
-                <span className="av-mono text-[11px] tracking-[0.2em] text-[var(--paper-dim)]">
+                <span className="h-px w-10 bg-(--gamma)/40" />
+                <span className="av-mono text-[11px] tracking-[0.2em] text-(--paper-dim)">
                   {p.year} · Shipped
                 </span>
               </div>
 
-              <h3 className="av-title mt-4 text-[clamp(1.9rem,5vw,3.2rem)] text-[var(--paper)]">
+              <h3 className="av-title mt-4 text-[clamp(1.9rem,5vw,3.2rem)] text-(--paper)">
                 {p.name}
               </h3>
-              <p className="av-mono mt-2 text-[11px] tracking-[0.2em] text-[var(--gamma-soft)] uppercase">
+              <p className="av-mono mt-2 text-[11px] tracking-[0.2em] text-(--gamma-soft) uppercase">
                 {p.subtitle}
               </p>
 
-              <p className="mt-5 max-w-xl text-[14.5px] leading-relaxed text-[var(--paper)]/85">
+              <p className="mt-5 max-w-xl text-[14.5px] leading-relaxed text-(--paper)/85">
                 {p.blurb}
               </p>
 
@@ -96,9 +96,9 @@ function Deck() {
                 {p.highlights.map((h) => (
                   <li
                     key={h}
-                    className="flex items-start gap-3 text-[13.5px] text-[var(--paper-dim)]"
+                    className="flex items-start gap-3 text-[13.5px] text-(--paper-dim)"
                   >
-                    <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rotate-45 bg-[var(--gamma)]/80" />
+                    <span className="mt-1.5 block h-1.5 w-1.5 shrink-0 rotate-45 bg-(--gamma)/80" />
                     {h}
                   </li>
                 ))}
@@ -119,7 +119,7 @@ function Deck() {
                     href={l.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="av-mono group inline-flex items-center gap-2 border border-[var(--gamma)]/40 px-4 py-2 text-[11px] tracking-[0.2em] text-[var(--paper)] uppercase transition-all duration-300 hover:border-[var(--gamma)] hover:bg-[var(--gamma)]/12 hover:text-[var(--gamma-soft)]"
+                    className="av-mono group inline-flex items-center gap-2 border border-(--gamma)/40 px-4 py-2 text-[11px] tracking-[0.2em] text-(--paper) uppercase transition-all duration-300 hover:border-(--gamma) hover:bg-(--gamma)/12 hover:text-(--gamma-soft)"
                   >
                     {l.label}
                     <span className="transition-transform duration-300 group-hover:translate-x-0.5">
@@ -135,12 +135,12 @@ function Deck() {
 
       {/* deck position */}
       <div className="av-deck-progress mt-8 flex items-center gap-4">
-        <span className="av-mono text-[10px] tracking-[0.24em] text-[var(--paper-dim)]">
+        <span className="av-mono text-[10px] tracking-[0.24em] text-(--paper-dim)">
           0{index + 1} / 0{projects.length}
         </span>
         <span className="relative h-px max-w-40 flex-1 bg-white/15">
           <span
-            className="absolute inset-y-0 left-0 bg-[var(--gamma)] transition-[width] duration-500"
+            className="absolute inset-y-0 left-0 bg-(--gamma) transition-[width] duration-500"
             style={{ width: `${((index + 1) / projects.length) * 100}%` }}
           />
         </span>
@@ -148,7 +148,7 @@ function Deck() {
           href="https://github.com/devshojol"
           target="_blank"
           rel="noreferrer"
-          className="av-mono text-[10px] tracking-[0.2em] text-[var(--paper-dim)] uppercase transition-colors hover:text-[var(--gamma)]"
+          className="av-mono text-[10px] tracking-[0.2em] text-(--paper-dim) uppercase transition-colors hover:text-(--gamma)"
         >
           More on GitHub ↗
         </a>

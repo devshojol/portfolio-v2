@@ -18,23 +18,23 @@ export default function Works({ year }: { year: number }) {
       <div className="v2-container">
         <SectionRail index="02" label="Works" year={year} />
 
-        <div className="mt-8 grid gap-10 md:mt-0 md:grid-cols-[1fr_minmax(0,440px)_1fr] md:gap-8">
+        <div className="mt-8 grid gap-10 pt-8 md:mt-0 md:grid-cols-[1fr_minmax(0,440px)_1fr] md:gap-8">
           <div className="md:sticky md:top-0 md:flex md:h-screen md:flex-col md:justify-center">
             <h2 className="v2-display text-[clamp(2.2rem,3.6vw,3.2rem)] text-white">
               Selected
               <br />
-              Works<span className="text-[var(--v2-accent)]">.</span>
+              Works<span className="text-(--v2-accent)">.</span>
             </h2>
             <a
               href="#v2-contact"
               onClick={onJump('#v2-contact')}
               className="v2-label v2-underline mt-6 inline-flex w-fit items-center gap-2 text-white/70 hover:text-white"
             >
-              <span className="text-[var(--v2-accent)]">&rarr;</span> Contact Now
+              <span className="text-(--v2-accent)">&rarr;</span> Contact Now
             </a>
           </div>
 
-          <div className="mx-auto flex w-full max-w-[440px] flex-col">
+          <div className="mx-auto flex w-full max-w-110 flex-col">
             {works.map((work, i) => (
               <WorkCard key={work.id} work={work} index={i} />
             ))}
@@ -64,9 +64,9 @@ function WorkCard({ work, index }: { work: Work; index: number }) {
       <Link
         href={work.href}
         {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-        className="group block bg-[var(--v2-paper)] pb-6"
+        className="group block bg-(--v2-paper) pb-6"
       >
-        <div className="relative h-[340px] w-full overflow-hidden border border-white/10 sm:h-[400px] md:h-[440px]">
+        <div className="relative h-85 w-full overflow-hidden border border-white/10 sm:h-100 md:h-110">
           <Image
             src={work.image}
             alt={`${work.name} — ${work.category}`}
@@ -83,7 +83,7 @@ function WorkCard({ work, index }: { work: Work; index: number }) {
                 ({String(index + 1).padStart(2, '0')})
               </span>
               {work.name}
-              <span className="align-super text-[0.6em] text-[var(--v2-accent)]">&reg;</span>
+              <span className="align-super text-[0.6em] text-(--v2-accent)">&reg;</span>
             </p>
             <p className="mt-1 text-xs text-white/45">{work.category}</p>
           </div>

@@ -37,18 +37,18 @@ export default function SectionShell({
         <div {...(exit ? { 'data-av-stage': '' } : {})} className="container-x w-full">
           <header className="av-head mb-5 sm:mb-10">
             <div data-av-side className="av-label flex items-center gap-3">
-              <span className="block h-1.5 w-1.5 rotate-45 bg-[var(--gamma)]" />
+              <span className="block h-1.5 w-1.5 rotate-45 bg-(--gamma)" />
               File {file} — {label}
             </div>
 
             <div
               data-av-rule
-              className="mt-3.5 h-px w-24 origin-left bg-linear-to-r from-[var(--gamma)] to-transparent"
+              className="mt-3.5 h-px w-24 origin-left bg-linear-to-r from-(--gamma) to-transparent"
             />
 
             <h2
               data-av-split
-              className="av-title av-glow mt-4 text-[clamp(1.8rem,6.2vw,4.4rem)] text-[var(--paper)] sm:mt-5"
+              className="av-title av-glow mt-4 text-[clamp(1.8rem,6.2vw,4.4rem)] text-(--paper) sm:mt-5"
             >
               {title}
             </h2>
@@ -56,7 +56,7 @@ export default function SectionShell({
             {kicker ? (
               <p
                 data-av-up
-                className="av-mono mt-3 max-w-xl text-[11px] leading-relaxed tracking-[0.16em] text-[var(--paper-dim)] uppercase sm:mt-4 sm:text-[12px]"
+                className="av-mono mt-3 max-w-xl text-[11px] leading-relaxed tracking-[0.16em] text-(--paper-dim) uppercase sm:mt-4 sm:text-[12px]"
               >
                 {kicker}
               </p>

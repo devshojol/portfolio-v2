@@ -57,7 +57,7 @@ export default function AvComms() {
   };
 
   const field =
-    'w-full border border-white/12 bg-[#04070a]/70 px-3.5 py-2.5 text-[14px] text-[var(--paper)] outline-none transition-colors duration-300 placeholder:text-[var(--paper-dim)]/60 focus:border-[var(--gamma)]/70';
+    'w-full border border-white/12 bg-[#04070a]/70 px-3.5 py-2.5 text-[14px] text-(--paper) outline-none transition-colors duration-300 placeholder:text-(--paper-dim)/60 focus:border-(--gamma)/70';
 
   return (
     <SectionShell
@@ -76,16 +76,16 @@ export default function AvComms() {
               <div
                 key={c.k}
                 /* the location repeats the kicker — phones don't need both */
-                className={`border-l border-[var(--gamma)]/30 pl-4 ${
+                className={`border-l border-(--gamma)/30 pl-4 ${
                   c.k === 'Based' ? 'hidden sm:block' : ''
                 }`}
               >
-                <dt className="av-mono text-[9px] tracking-[0.26em] text-[var(--gamma)] uppercase">
+                <dt className="av-mono text-[9px] tracking-[0.26em] text-(--gamma) uppercase">
                   {c.k}
                 </dt>
-                <dd className="mt-1 text-[15px] text-[var(--paper)]">
+                <dd className="mt-1 text-[15px] text-(--paper)">
                   {c.href ? (
-                    <a className="transition-colors hover:text-[var(--gamma-soft)]" href={c.href}>
+                    <a className="transition-colors hover:text-(--gamma-soft)" href={c.href}>
                       {c.v}
                     </a>
                   ) : (
@@ -129,7 +129,7 @@ export default function AvComms() {
 
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="block">
-              <span className="av-mono text-[9px] tracking-[0.24em] text-[var(--paper-dim)] uppercase">
+              <span className="av-mono text-[9px] tracking-[0.24em] text-(--paper-dim) uppercase">
                 Name
               </span>
               <input
@@ -141,7 +141,7 @@ export default function AvComms() {
               />
             </label>
             <label className="block">
-              <span className="av-mono text-[9px] tracking-[0.24em] text-[var(--paper-dim)] uppercase">
+              <span className="av-mono text-[9px] tracking-[0.24em] text-(--paper-dim) uppercase">
                 Email
               </span>
               <input
@@ -156,7 +156,7 @@ export default function AvComms() {
           </div>
 
           <label className="block">
-            <span className="av-mono text-[9px] tracking-[0.24em] text-[var(--paper-dim)] uppercase">
+            <span className="av-mono text-[9px] tracking-[0.24em] text-(--paper-dim) uppercase">
               Message
             </span>
             <textarea
@@ -173,18 +173,18 @@ export default function AvComms() {
             <button
               type="submit"
               disabled={status === 'sending'}
-              className="av-mono border border-[var(--gamma)]/70 bg-[var(--gamma)]/12 px-5 py-2.5 text-[11px] tracking-[0.24em] text-[var(--gamma-soft)] uppercase transition-all duration-300 hover:bg-[var(--gamma)] hover:text-[#04070a] disabled:opacity-50"
+              className="av-mono border border-(--gamma)/70 bg-(--gamma)/12 px-5 py-2.5 text-[11px] tracking-[0.24em] text-(--gamma-soft) uppercase transition-all duration-300 hover:bg-(--gamma) hover:text-[#04070a] disabled:opacity-50"
             >
               {status === 'sending' ? 'Transmitting…' : 'Send transmission'}
             </button>
 
             {status === 'sent' && (
-              <span className="av-mono text-[10px] tracking-[0.2em] text-[var(--gamma)] uppercase">
+              <span className="av-mono text-[10px] tracking-[0.2em] text-(--gamma) uppercase">
                 Received — I&apos;ll reply soon
               </span>
             )}
             {status === 'error' && (
-              <span className="av-mono text-[10px] tracking-[0.2em] text-[var(--alert)] uppercase">
+              <span className="av-mono text-[10px] tracking-[0.2em] text-(--alert) uppercase">
                 {error}
               </span>
             )}
