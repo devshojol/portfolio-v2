@@ -1,18 +1,37 @@
 /* Scoped to the /v2 tree so none of it can leak into the main page, which
    runs a different palette and type scale. */
 
+/* The accent lives on the root, not on `.v2`, so fixed overlays that are
+   siblings of the page — the custom cursor — can read it too. `.v2` just
+   inherits it.
+
+   `--v2-accent-pick` is what the corner picker writes on the root element;
+   unset it and this falls back to the primary, so the default survives with
+   JavaScript off. */
+html:has(.v2) {
+  --v2-accent: var(--v2-accent-pick, #a7c957);
+  --cursor-accent: var(--v2-accent);
+}
+
+/* The page draws its own cursor, so the native arrow has to go — otherwise
+   both are visible at once. Gated to exactly where Cursor.tsx actually
+   renders, or a touch/reduced-motion visitor would be left with none. */
+@media (min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html:has(.v2),
+  html:has(.v2) body,
+  .v2,
+  .v2 * {
+    cursor: none;
+  }
+}
+
 .v2 {
-  /* The reference is signal red on black; this swaps in the site's own
-     cyan and keeps the black. One token, so a re-colour is a one-line change. */
-  --v2-accent: #22d3ee;
-  --v2-accent-deep: #0891b2;
   --v2-ink: #000000;
   --v2-paper: #05060a;
   --v2-muted: #8b93a1;
 
   background: var(--v2-paper);
   color: #f4f6fa;
-  cursor: auto;
 }
 
 /* Hides the scrollbar on this page only.

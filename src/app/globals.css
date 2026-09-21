@@ -132,10 +132,19 @@
 
 :root {
   color-scheme: dark;
+  /* What Cursor.tsx paints with. The v2 tree overrides it with its themeable
+     accent; everywhere else this is the midnight cyan. */
+  --cursor-accent: var(--color-accent);
 }
 
-* {
-  border-color: var(--color-line);
+/* The default border colour, so a bare `border` utility has something to draw.
+   It must sit in `@layer base`: v4 puts utilities in `@layer utilities`, and
+   unlayered CSS outranks every layer regardless of specificity — left bare,
+   this `*` rule silently beat every `border-<colour>` class in the project. */
+@layer base {
+  * {
+    border-color: var(--color-line);
+  }
 }
 
 html {

@@ -126,7 +126,7 @@ export default function About({ year }: { year: number }) {
                   {job.stack.map((tech) => (
                     <li
                       key={tech}
-                      className="v2-label border border-white/15 px-3 py-1.5 text-white/60"
+                      className="v2-label border border-(--v2-accent)/30 bg-(--v2-accent)/12 px-3 py-1.5 text-(--v2-accent)/90"
                     >
                       {tech}
                     </li>

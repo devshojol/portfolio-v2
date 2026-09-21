@@ -6,6 +6,7 @@ import Works from '@/components/v2/Works';
 import Skills from '@/components/v2/Skills';
 import Contact from '@/components/v2/Contact';
 import SlantFloor from '@/components/v2/SlantFloor';
+import ThemeFab from '@/components/v2/ThemeFab';
 import { profile, projects, siteUrl, socials } from '@/lib/data';
 
 const PERSON_ID = `${siteUrl}/#person`;
@@ -113,6 +114,7 @@ export default function V2Page() {
           </div>
         </SlantFloor>
         <Contact />
+        <ThemeFab />
       </main>
     </>
   );

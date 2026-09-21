@@ -1,14 +1,19 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
-import { useHasFinePointer, usePrefersReducedMotion } from "@/lib/media";
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
+import { useHasFinePointer, usePrefersReducedMotion } from '@/lib/media';
 
 /**
- * A two-part cursor: a small dot that tracks 1:1 and a larger ring that
- * lags behind and swells over interactive elements. It stays hidden until
- * the pointer first moves, and is skipped entirely on touch devices or
+ * A two-part cursor: a square that tracks 1:1 and a larger frame that lags
+ * behind, swells and turns 45° over anything interactive. It stays hidden
+ * until the pointer first moves, and is skipped entirely on touch devices or
  * when reduced motion is requested.
+ *
+ * Both parts paint in `--cursor-accent`, so on the home page they follow the
+ * theme picker. A dark halo rides under them: the accent is also the hero's
+ * background colour, and without it the cursor would vanish the moment it
+ * crossed onto the accent field.
  */
 export default function Cursor() {
   const wrapRef = useRef<HTMLDivElement>(null);
@@ -20,7 +25,7 @@ export default function Cursor() {
   // The /design sandbox has its own DesignCursor (a reticle) — two custom
   // cursors rendered at once would fight each other visually.
   const pathname = usePathname();
-  const enabled = finePointer && !reduced && !pathname?.startsWith("/design");
+  const enabled = finePointer && !reduced && !pathname?.startsWith('/design');
 
   useEffect(() => {
     if (!enabled) return;
@@ -40,17 +45,17 @@ export default function Cursor() {
         shown = true;
         ring.x = pos.x;
         ring.y = pos.y;
-        if (wrapRef.current) wrapRef.current.style.opacity = "1";
+        if (wrapRef.current) wrapRef.current.style.opacity = '1';
       }
 
       const el = e.target as HTMLElement | null;
       const interactive = !!el?.closest?.(
-        'a, button, input, textarea, [role="button"], [data-cursor="grow"]',
+        'a, button, input, textarea, [role="button"], [data-cursor="grow"]'
       );
       targetScale = interactive ? 2.1 : 1;
 
       if (dotRef.current) {
-        dotRef.current.style.transform = `translate3d(${pos.x - 3}px, ${pos.y - 3}px, 0)`;
+        dotRef.current.style.transform = `translate3d(${pos.x - 4}px, ${pos.y - 4}px, 0)`;
       }
     };
 
@@ -58,17 +63,23 @@ export default function Cursor() {
       ring.x += (pos.x - ring.x) * 0.16;
       ring.y += (pos.y - ring.y) * 0.16;
       scale += (targetScale - scale) * 0.14;
+      // The turn is derived from the swell, so the two never disagree.
+      const turn = ((scale - 1) / 1.1) * 45;
       if (ringRef.current) {
-        ringRef.current.style.transform = `translate3d(${ring.x - 18}px, ${ring.y - 18}px, 0) scale(${scale.toFixed(3)})`;
+        ringRef.current.style.transform = `translate3d(${ring.x - 18}px, ${ring.y - 18}px, 0) rotate(${turn.toFixed(2)}deg) scale(${scale.toFixed(3)})`;
+      }
+      if (dotRef.current) {
+        // The dot gives way as the frame takes over.
+        dotRef.current.style.opacity = String(Math.max(0, 1 - (scale - 1) * 1.4));
       }
       frame = requestAnimationFrame(loop);
     };
 
-    window.addEventListener("pointermove", onMove, { passive: true });
+    window.addEventListener('pointermove', onMove, { passive: true });
     frame = requestAnimationFrame(loop);
 
     return () => {
-      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener('pointermove', onMove);
       cancelAnimationFrame(frame);
     };
   }, [enabled]);
@@ -84,11 +95,19 @@ export default function Cursor() {
     >
       <div
         ref={ringRef}
-        className="absolute left-0 top-0 h-9 w-9 rounded-full border border-accent/60 mix-blend-screen will-change-transform"
+        style={{
+          borderColor: 'var(--cursor-accent)',
+          boxShadow: '0 0 0 1.5px rgb(0 0 0 / 0.8), inset 0 0 0 1.5px rgb(0 0 0 / 0.8)',
+        }}
+        className="absolute top-0 left-0 h-9 w-9 border will-change-transform"
       />
       <div
         ref={dotRef}
-        className="absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-accent will-change-transform"
+        style={{
+          backgroundColor: 'var(--cursor-accent)',
+          boxShadow: '0 0 0 2px rgb(0 0 0 / 0.85)',
+        }}
+        className="absolute top-0 left-0 h-2 w-2 will-change-transform"
       />
     </div>
   );

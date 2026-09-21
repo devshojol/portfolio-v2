@@ -28,6 +28,13 @@ const CHIP_SPAN = 0.22;
 
 const LARGE = '(min-width: 1024px)';
 
+/**
+ * Height of the pinned track. The section holds for `TRACK_VH - 100` of
+ * viewport height, so 200 means the whole sequence plays across one screen of
+ * scrolling; at the original 300 it held for two, which read as being stuck.
+ */
+const TRACK_VH = 200;
+
 /** Breathing room kept above and below the pinned diagram, in total. */
 const SHELL = 64;
 /** Never shrink past this — below it the labels stop being readable. */
@@ -135,7 +142,11 @@ export default function Skills({ year }: { year: number }) {
 
   return (
     <section id="v2-skills" className="relative z-10 bg-(--v2-paper)">
-      <div ref={trackRef} className={pinned ? 'relative h-[300vh]' : 'relative'}>
+      <div
+        ref={trackRef}
+        className="relative"
+        style={pinned ? { height: `${TRACK_VH}vh` } : undefined}
+      >
         <div
           className={
             pinned ? 'sticky top-0 flex h-screen flex-col justify-center' : 'flex flex-col'
