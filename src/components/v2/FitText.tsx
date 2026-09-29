@@ -1,6 +1,6 @@
 'use client';
 
-import { useLayoutEffect, useRef } from 'react';
+import { useLayoutEffect, useRef, type ReactNode } from 'react';
 
 /**
  * Scales a wordmark to exactly fill its container's width.
@@ -19,10 +19,13 @@ export default function FitText({
   className = '',
   /** Ceiling on the rendered block, as a share of viewport height. */
   maxVh = 52,
+  endAdornment,
 }: {
   text: string | readonly string[];
   className?: string;
   maxVh?: number;
+  /** Artwork positioned relative to the final letter, at the fitted font size. */
+  endAdornment?: ReactNode;
 }) {
   const wrap = useRef<HTMLDivElement>(null);
   const block = useRef<HTMLSpanElement>(null);
@@ -72,11 +75,24 @@ export default function FitText({
   }, [key, maxVh]);
 
   return (
-    <div ref={wrap} className={`w-full overflow-hidden ${className}`}>
+    <div
+      ref={wrap}
+      className={`w-full ${endAdornment ? 'overflow-visible' : 'overflow-hidden'} ${className}`}
+    >
       <span ref={block} className="v2-display inline-block text-[25vw]">
-        {lines.map((line) => (
+        {lines.map((line, index) => (
           <span key={line} className="block whitespace-nowrap">
-            {line}
+            {endAdornment && index === lines.length - 1 ? (
+              <>
+                {line.slice(0, -1)}
+                <span className="relative inline-block">
+                  {line.slice(-1)}
+                  {endAdornment}
+                </span>
+              </>
+            ) : (
+              line
+            )}
           </span>
         ))}
       </span>

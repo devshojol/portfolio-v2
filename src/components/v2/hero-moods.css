@@ -1,0 +1,248 @@
+/* Relative to the actual final glyph, including when SHOJOL wraps to SHO/JOL.
+   y=190 is each scene's floor; bottom places it on L's horizontal stroke. */
+.hero-mood {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  bottom: 0.125em;
+  width: 0.55em;
+  line-height: 0;
+  pointer-events: none;
+  letter-spacing: normal;
+}
+.hero-mood-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 240 / 194;
+  overflow: visible;
+  animation: mood-arrive 240ms ease-out both;
+}
+.hero-mood svg g {
+  transform-box: view-box;
+}
+.mood-breathe {
+  transform-origin: 105px 189px;
+  animation: mood-breathe 3.8s ease-in-out infinite;
+}
+.mood-z {
+  animation: mood-dream 3.8s ease-in-out infinite;
+}
+.mood-z-two {
+  animation-delay: -2.5s;
+}
+.mood-z-three {
+  animation-delay: -1.2s;
+}
+.mood-work-body {
+  transform-origin: 67px 135px;
+  animation: mood-focus 4s ease-in-out infinite;
+}
+.mood-type {
+  animation: mood-type 350ms steps(2, end) infinite;
+}
+.mood-code {
+  animation: mood-screen 1.8s steps(2, end) infinite;
+}
+.mood-steam {
+  animation: mood-dream 2.8s ease-out infinite;
+}
+.mood-juggle-thigh {
+  transform-origin: 122px 128px;
+  animation: mood-juggle-thigh 1.4s ease-in-out infinite;
+}
+.mood-juggle-shin {
+  transform-origin: 130px 151px;
+  animation: mood-juggle-shin 1.4s ease-in-out infinite;
+}
+.mood-football-body {
+  transform-origin: 113px 122px;
+  animation: mood-football-balance 1.4s ease-in-out infinite;
+}
+.mood-football-arm-back {
+  transform-origin: 88px 80px;
+  animation: mood-football-arm 1.4s ease-in-out infinite;
+}
+.mood-football-arm-front {
+  transform-origin: 135px 83px;
+  animation: mood-football-arm 1.4s ease-in-out infinite reverse;
+}
+.mood-ball {
+  transform-origin: 169px 144px;
+  animation: mood-ball 1.4s infinite;
+}
+.mood-ball-shadow {
+  transform-origin: 169px 188px;
+  animation: mood-shadow 1.4s ease-in-out infinite;
+}
+.mood-game-body {
+  transform-origin: 62px 138px;
+  animation: mood-focus 2.4s ease-in-out infinite;
+}
+.mood-mouse {
+  animation: mood-type 650ms ease-in-out infinite;
+}
+.mood-game-target {
+  animation: mood-target 2s ease-in-out infinite;
+}
+.mood-game-ship {
+  animation: mood-ship 1.3s ease-in-out infinite;
+}
+@keyframes mood-arrive {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes mood-breathe {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.045);
+  }
+}
+@keyframes mood-dream {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+@keyframes mood-focus {
+  0%,
+  100% {
+    transform: rotate(-1deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+}
+@keyframes mood-type {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+@keyframes mood-screen {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@keyframes mood-juggle-thigh {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-4deg);
+  }
+  42%,
+  70% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes mood-football-balance {
+  0%,
+  100% {
+    transform: rotate(-2deg);
+  }
+  45%,
+  65% {
+    transform: rotate(1deg);
+  }
+}
+@keyframes mood-football-arm {
+  0%,
+  100% {
+    transform: rotate(-5deg);
+  }
+  45%,
+  65% {
+    transform: rotate(4deg);
+  }
+}
+@keyframes mood-juggle-shin {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  12% {
+    transform: rotate(-6deg);
+  }
+  45%,
+  72% {
+    transform: rotate(10deg);
+  }
+}
+@keyframes mood-ball {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.333, 0.667, 0.667, 1);
+  }
+  48% {
+    transform: translate(3px, -98px) rotate(180deg);
+    animation-timing-function: cubic-bezier(0.333, 0, 0.667, 0.333);
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+  }
+}
+@keyframes mood-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.25;
+  }
+  48% {
+    transform: scaleX(0.45);
+    opacity: 0.1;
+  }
+}
+@keyframes mood-target {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-15px);
+  }
+}
+@keyframes mood-ship {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+.hero-mood[data-playing='false'],
+.hero-mood[data-playing='false'] * {
+  animation-play-state: paused !important;
+}
+html:has(#v2-home[data-moods-visible='true']) .v2-theme-picker {
+  bottom: 1rem;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-mood,
+  .hero-mood * {
+    animation: none !important;
+  }
+}

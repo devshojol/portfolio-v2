@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
 import { profile } from '@/lib/data';
 import HeroDim from './HeroDim';
-import { MOODS, MoodFigure } from './Doodles';
+import { HERO_MOODS, HeroMood } from './HeroMood';
 import FitText from './FitText';
 import { navLinks, wordmark, wordmarkLines } from './data';
 import { onJump } from './jump';
+import './hero-moods.css';
 
 /**
  * Full-bleed accent panel, pinned so the black sections scroll up over it.
@@ -15,11 +15,32 @@ import { onJump } from './jump';
  */
 export default function Hero() {
   const [mood, setMood] = useState(0);
-  const shift = () => setMood((m) => (m + 1) % MOODS.length);
+  const [visible, setVisible] = useState(true);
+  const hero = useRef<HTMLElement>(null);
+  const shift = () => setMood((m) => (m + 1) % HERO_MOODS.length);
+
+  useEffect(() => {
+    const el = hero.current;
+    if (!el) return;
+    // Sticky elements remain intersecting while covered. Use the scroll position
+    // as well to stop the loops once the following section covers the hero.
+    const update = () => setVisible(!document.hidden && window.scrollY < el.offsetHeight);
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    document.addEventListener('visibilitychange', update);
+    return () => {
+      window.removeEventListener('scroll', update);
+      document.removeEventListener('visibilitychange', update);
+    };
+  }, []);
+
+  const figure = <HeroMood mood={mood} playing={visible} />;
 
   return (
     <section
       id="v2-home"
+      ref={hero}
+      data-moods-visible={visible}
       onClick={shift}
       className="sticky top-0 flex h-screen w-full flex-col justify-between overflow-hidden bg-(--v2-accent) text-black select-none"
     >
@@ -51,37 +72,37 @@ export default function Hero() {
       </header>
 
       <div className="v2-container text-sm">
-        <p className="text-black/45">Mood isn&rsquo;t fixed</p>
-        <p className="font-semibold text-black">click anywhere to shift it.</p>
+        <p className="text-black/65">Mood isn&rsquo;t fixed</p>
+        <button
+          type="button"
+          onClick={(event) => {
+            event.stopPropagation();
+            shift();
+          }}
+          className="mood-trigger block py-1 text-left font-semibold text-black focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black"
+          aria-label={`Current mood: ${HERO_MOODS[mood]}. Change to ${HERO_MOODS[(mood + 1) % HERO_MOODS.length]}`}
+        >
+          click anywhere to shift it.
+        </button>
+        <p
+          className="mt-3 font-mono text-[10px] tracking-[0.12em] text-black/65 uppercase"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {String(mood + 1).padStart(2, '0')} / 04 &nbsp; {HERO_MOODS[mood]}
+        </p>
       </div>
 
       <div>
         <div className="v2-container relative">
-          {/* Sits over the wordmark's baseline, as in the reference. Anchored
-              to the gutter, not the window, so it lines up with the nav above. */}
-          <div className="pointer-events-none absolute right-5 bottom-[2.5rem] z-10 w-[24vw] max-w-[270px] min-w-[110px] md:right-10 md:bottom-[3rem]">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={mood}
-                initial={{ opacity: 0, y: 18, rotate: -4 }}
-                animate={{ opacity: 1, y: 0, rotate: 0 }}
-                exit={{ opacity: 0, y: -14, rotate: 4 }}
-                transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <MoodFigure index={mood} className="h-auto w-full" />
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          <h1>
+          <h1 aria-label={wordmark}>
             {/* Only one of these is ever displayed, so screen readers still
                 see the name once. */}
             <span className="block md:hidden">
-              {/* <FitText text={['SH', 'OJOL']} maxVh={46} /> */}
-              <FitText text={wordmarkLines} maxVh={46} />
+              <FitText text={wordmarkLines} maxVh={46} endAdornment={figure} />
             </span>
             <span className="hidden md:block">
-              <FitText text={wordmark} />
+              <FitText text={wordmark} endAdornment={figure} />
             </span>
           </h1>
         </div>

@@ -105,7 +105,7 @@ export default function ThemeFab() {
   }, [open]);
 
   return (
-    <div ref={root} className="fixed right-5 bottom-16 z-50 md:right-8">
+    <div ref={root} className="v2-theme-picker fixed right-5 bottom-16 z-50 md:right-8">
       <AnimatePresence>
         {open &&
           ACCENTS.map((swatch, i) => {
