@@ -49,10 +49,14 @@ export const metadata: Metadata = {
   description: profile.summary,
   keywords: [
     "Shojol Islam",
+    "devshojol",
     "Frontend Developer",
+    "Frontend Developer Dhaka",
+    "React Developer",
     "React Native Developer",
     "React Developer Bangladesh",
     "Next.js",
+    "TypeScript",
     "Expo",
     "MERN",
   ],
@@ -65,7 +69,10 @@ export const metadata: Metadata = {
     description: profile.tagline,
     siteName: profile.name,
     locale: "en_US",
-    images: ["/thumbnail.jpg"],
+    // No `images` key on purpose. File-based metadata outranks the metadata
+    // object, so `opengraph-image.tsx` is what actually ships — and it is the
+    // 1200x630 the `summary_large_image` card below needs. Naming a file here
+    // would be dead config that never reaches the head.
     firstName: profile.firstName,
     username: "devshojol",
   },
@@ -92,7 +99,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#060a12",
+  // `--v2-paper` — the background of the page visitors actually land on, so the
+  // browser chrome matches the first paint instead of the old /v1 night blue.
+  themeColor: "#05060a",
   colorScheme: "dark",
 };
 

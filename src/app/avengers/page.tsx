@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   title: 'Avengers Protocol',
   description:
     'A scroll-driven cut of the Shojol Islam portfolio, played against muted footage from The Avengers.',
+  // Its own canonical: metadata merges shallowly, so without this the route
+  // keeps the root layout's `canonical: "/"` and points at the homepage.
+  alternates: { canonical: '/avengers' },
   robots: { index: false, follow: false },
 };
 

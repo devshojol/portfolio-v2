@@ -7,11 +7,15 @@ import Skills from '@/components/v2/Skills';
 import Contact from '@/components/v2/Contact';
 import SlantFloor from '@/components/v2/SlantFloor';
 import ThemeFab from '@/components/v2/ThemeFab';
-import { profile, projects, siteUrl, socials } from '@/lib/data';
+import { profile, projects, siteUrl, skillGroups, socials } from '@/lib/data';
 
 const PERSON_ID = `${siteUrl}/#person`;
 const WEBSITE_ID = `${siteUrl}/#website`;
-const skills = ['React', 'React Native', 'Next.js', 'TypeScript', 'Node.js', 'MongoDB'];
+/**
+ * Flattened from the same source the Skills section renders, so the graph can
+ * never claim something the page doesn't show — or miss something it does.
+ */
+const skills = skillGroups.flatMap((group) => [...group.items]);
 
 /**
  * One linked @graph rather than several loose objects, so Google resolves the
@@ -28,6 +32,7 @@ const structuredData = {
       jobTitle: profile.role,
       description: profile.summary,
       url: siteUrl,
+      image: `${siteUrl}/v2/portrait.jpg`,
       email: `mailto:${profile.email}`,
       telephone: profile.phoneHref,
       address: {

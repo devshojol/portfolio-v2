@@ -16,6 +16,9 @@ import type { Metadata } from 'next';
  * while it was the alternate.
  */
 export const metadata: Metadata = {
+  title: 'Portfolio v1',
+  description:
+    'The first cut of the Shojol Islam portfolio — a WebGL hero with a morphing metallic core, orbital rings and a particle starfield.',
   alternates: { canonical: '/v1' },
   robots: { index: false, follow: true },
 };
